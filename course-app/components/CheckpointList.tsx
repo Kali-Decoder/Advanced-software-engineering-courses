@@ -2,6 +2,7 @@
 
 import type { Module } from "@/lib/types";
 import { checkpointId } from "@/lib/course";
+import { markModuleComplete } from "@/lib/progress";
 import { useProgressContext } from "@/context/ProgressContext";
 import { AnimatedCheckbox } from "./AnimatedCheckbox";
 
@@ -27,16 +28,13 @@ export function CheckpointList({ module, onUpdate }: CheckpointListProps) {
   };
 
   const toggleModuleComplete = (checked: boolean) => {
-    const next = {
-      ...state,
-      modulesComplete: { ...state.modulesComplete, [module.id]: checked },
-      checkpoints: { ...state.checkpoints },
-    };
-    if (checked) {
-      module.checkpoints.forEach((_, i) => {
-        next.checkpoints[checkpointId(module.id, i)] = true;
-      });
-    }
+    const next = checked
+      ? markModuleComplete(module, state)
+      : {
+          ...state,
+          modulesComplete: { ...state.modulesComplete, [module.id]: false },
+          checkpoints: { ...state.checkpoints },
+        };
     persist(next);
     onUpdate?.();
   };

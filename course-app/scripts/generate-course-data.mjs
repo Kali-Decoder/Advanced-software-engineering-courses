@@ -3,8 +3,23 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const mdPath = path.resolve(__dirname, "../../AI Agent Memory Course.md");
 const outPath = path.resolve(__dirname, "../lib/course/modules.json");
+
+function findMarkdownPath() {
+  const candidates = [
+    path.resolve(__dirname, "../../AI Agent Memory Course.md"),
+    path.resolve(process.cwd(), "../AI Agent Memory Course.md"),
+    path.resolve(process.cwd(), "AI Agent Memory Course.md"),
+  ];
+  for (const candidate of candidates) {
+    if (fs.existsSync(candidate)) return candidate;
+  }
+  throw new Error(
+    "AI Agent Memory Course.md not found. Expected it at the repository root."
+  );
+}
+
+const mdPath = findMarkdownPath();
 
 const LEVELS = {
   0: "Foundation",

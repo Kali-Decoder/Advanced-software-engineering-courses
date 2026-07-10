@@ -61,6 +61,21 @@ export function isModuleComplete(
   );
 }
 
+export function markModuleComplete(
+  module: Module,
+  state: ProgressState
+): ProgressState {
+  const next: ProgressState = {
+    ...state,
+    modulesComplete: { ...state.modulesComplete, [module.id]: true },
+    checkpoints: { ...state.checkpoints },
+  };
+  module.checkpoints.forEach((_, i) => {
+    next.checkpoints[checkpointId(module.id, i)] = true;
+  });
+  return next;
+}
+
 export function getLevelProgress(
   level: string,
   state: ProgressState

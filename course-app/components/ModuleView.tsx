@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { Module } from "@/lib/types";
-import { getModuleProgress } from "@/lib/progress";
+import { getModuleProgress, markModuleComplete } from "@/lib/progress";
 import { useProgressContext } from "@/context/ProgressContext";
 import { CheckpointList } from "./CheckpointList";
 import { Diagram } from "./Diagram";
@@ -28,6 +28,16 @@ export function ModuleView({ module }: { module: Module }) {
 
   const goToModule = (id: number) => {
     persist({ ...state, lastModule: id });
+  };
+
+  const completeCurrentAndGo = (targetId: number | "home") => {
+    const next = markModuleComplete(module, state);
+    if (targetId === "home") {
+      persist(next);
+    } else {
+      persist({ ...next, lastModule: targetId });
+    }
+    setTick((t) => t + 1);
   };
 
   const prev = module.id > 0 ? module.id - 1 : null;
@@ -146,7 +156,7 @@ export function ModuleView({ module }: { module: Module }) {
             <Link
               href={`/modules/${next}`}
               className="inline-flex items-center gap-2 rounded-lg bg-neutral-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800"
-              onClick={() => goToModule(next)}
+              onClick={() => completeCurrentAndGo(next)}
             >
               Module {next} →
             </Link>
@@ -154,6 +164,7 @@ export function ModuleView({ module }: { module: Module }) {
             <Link
               href="/"
               className="inline-flex items-center gap-2 rounded-lg border border-neutral-950 bg-neutral-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800"
+              onClick={() => completeCurrentAndGo("home")}
             >
               Finish Course →
             </Link>
