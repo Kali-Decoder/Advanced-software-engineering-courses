@@ -1,24 +1,37 @@
 "use client";
 
 import { useProgressContext } from "@/context/ProgressContext";
+import { useSidebarCollapsed } from "@/hooks/useSidebarCollapsed";
 import { Header } from "./Header";
 import { MobileNav } from "./MobileNav";
 import { Sidebar } from "./Sidebar";
 
 export function CourseShell({ children }: { children: React.ReactNode }) {
   const { reset } = useProgressContext();
+  const { collapsed, toggle, hydrated } = useSidebarCollapsed();
 
   return (
     <>
       <Header />
       <MobileNav />
       <div className="mx-auto flex w-full min-w-0 max-w-[1400px] flex-1 bg-white lg:gap-0">
-        <div className="hidden w-[280px] shrink-0 border-r border-neutral-200 bg-neutral-50 lg:block xl:w-[300px]">
+        <div
+          className={`sidebar-shell relative hidden shrink-0 border-r border-neutral-200 bg-neutral-50 lg:block ${
+            hydrated
+              ? collapsed
+                ? "sidebar-shell-collapsed"
+                : "sidebar-shell-expanded"
+              : "sidebar-shell-expanded"
+          }`}
+        >
           <div className="sticky top-0 h-screen overflow-hidden">
-            <Sidebar />
+            <Sidebar
+              collapsed={hydrated && collapsed}
+              onToggle={toggle}
+            />
           </div>
         </div>
-        <main className="min-w-0 max-w-full flex-1 overflow-x-hidden bg-white px-4 py-6 sm:px-8 sm:py-10">
+        <main className="main-content min-w-0 max-w-full flex-1 overflow-x-hidden bg-white px-4 py-6 sm:px-8 sm:py-10">
           {children}
         </main>
       </div>
