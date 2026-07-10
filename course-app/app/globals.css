@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+:root {
+  --ink: #0a0a0a;
+  --ink-soft: #171717;
+  --paper: #ffffff;
+  --paper-muted: #fafafa;
+  --border: #e5e5e5;
+  --border-strong: #d4d4d4;
+  --muted: #737373;
+  --muted-light: #a3a3a3;
+  --track: #f5f5f5;
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-paper: var(--paper);
+  --color-paper-muted: var(--paper-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-muted: var(--muted);
+  --color-track: var(--track);
+  --font-sans: var(--font-sans), "Source Sans 3", system-ui, sans-serif;
+  --font-serif: var(--font-serif), "Crimson Pro", Georgia, serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+body {
+  overflow-x: hidden;
+  width: 100%;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--paper); }
+::-webkit-scrollbar-thumb {
+  background: #d4d4d4;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: #a3a3a3; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-up { animation: fade-up 0.45s ease-out both; }
+.animate-fade-in { animation: fade-in 0.35s ease-out both; }
+
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+.stagger-5 { animation-delay: 0.25s; }
+
+.card-interactive {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.12);
+  border-color: var(--ink);
+}
+
+.progress-shimmer {
+  background: linear-gradient(
+    90deg,
+    #0a0a0a 0%,
+    #404040 45%,
+    #737373 50%,
+    #404040 55%,
+    #0a0a0a 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.tab-active {
+  position: relative;
+  background: var(--ink) !important;
+  color: var(--paper) !important;
+}
+
+.tab-active::after {
+  display: none;
+}
+
+.diagram-container {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  overflow: hidden;
+  contain: layout style;
+}
+.diagram-container svg,
+.diagram-container .diagram-svg {
+  display: block;
+  width: 100% !important;
+  max-width: 100%;
+  min-width: 0;
+  height: auto;
+  overflow: hidden;
+}
+.diagram-container .diagram-box {
+  fill: #fafafa;
+  stroke: #0a0a0a;
+  stroke-width: 1.5;
+}
+.diagram-container .diagram-box.foundation,
+.diagram-container .diagram-box.core,
+.diagram-container .diagram-box.intermediate,
+.diagram-container .diagram-box.advanced,
+.diagram-container .diagram-box.research,
+.diagram-container .diagram-box.capstone {
+  fill: #f5f5f5;
+  stroke: #0a0a0a;
+}
+.diagram-container .diagram-label,
+.diagram-container .diagram-title {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  fill: #0a0a0a;
+}
+.diagram-container .diagram-sublabel {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  fill: #525252;
+}
+.diagram-container .diagram-arrow {
+  stroke: #0a0a0a;
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.reading-progress {
+  transform-origin: left;
+  transition: transform 0.1s linear;
+  background: #0a0a0a;
+}
+
+.lesson-numbered { counter-reset: lesson-num; }
+.lesson-num-item { counter-increment: lesson-num; }
+.lesson-num-item .lesson-num::before { content: counter(lesson-num); }
+
+.lesson-steps { counter-reset: lesson-step; }
+.lesson-step-item { counter-increment: lesson-step; }
+.lesson-step-item .lesson-step-num::before { content: counter(lesson-step); }
+
+@keyframes check-pop {
+  0% { transform: scale(0.5); }
+  50% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
