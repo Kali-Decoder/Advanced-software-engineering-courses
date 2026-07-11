@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { DiagramFullscreen, MaximizeButton } from "./DiagramFullscreen";
 
 interface MermaidDiagramProps {
   chart: string;
@@ -12,6 +13,8 @@ export function MermaidDiagram({ chart, title }: MermaidDiagramProps) {
   const reactId = useId();
   const [error, setError] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
+  const [svgHtml, setSvgHtml] = useState<string | null>(null);
+  const [fullscreen, setFullscreen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -47,6 +50,7 @@ export function MermaidDiagram({ chart, title }: MermaidDiagramProps) {
             svgEl.style.maxWidth = "100%";
             svgEl.style.height = "auto";
           }
+          setSvgHtml(containerRef.current.innerHTML);
           setReady(true);
           setError(null);
         }
@@ -79,9 +83,9 @@ export function MermaidDiagram({ chart, title }: MermaidDiagramProps) {
             )}
           </div>
         </div>
-        <span className="hidden rounded-full border border-neutral-200 bg-neutral-50 px-2.5 py-1 text-[0.65rem] font-medium uppercase tracking-wider text-neutral-500 sm:inline">
-          Interactive
-        </span>
+        {ready && !error && (
+          <MaximizeButton onClick={() => setFullscreen(true)} />
+        )}
       </div>
 
       <div className="relative p-4 sm:p-6">
@@ -115,6 +119,19 @@ export function MermaidDiagram({ chart, title }: MermaidDiagramProps) {
           </pre>
         )}
       </div>
+
+      <DiagramFullscreen
+        open={fullscreen}
+        onClose={() => setFullscreen(false)}
+        title={title}
+      >
+        {svgHtml && (
+          <div
+            className="architecture-diagram-canvas w-full max-w-6xl [&_svg]:mx-auto [&_svg]:h-auto [&_svg]:max-w-full"
+            dangerouslySetInnerHTML={{ __html: svgHtml }}
+          />
+        )}
+      </DiagramFullscreen>
     </figure>
   );
 }
