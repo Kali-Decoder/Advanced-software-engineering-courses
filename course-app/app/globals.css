@@ -241,3 +241,14 @@ body {
   font-size: 0.875rem;
   color: #737373;
 }
+
+/* Submodule deep-dive */
+.submodule-grid .architecture-diagram {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.lesson-prose .lesson-prose-diagram .architecture-diagram,
+.submodule-grid .architecture-diagram {
+  font-size: 0.95rem;
+}

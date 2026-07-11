@@ -32,14 +32,14 @@ export const COURSE_LIST: CourseMeta[] = [
       "Beginner-friendly path with simple explanations, architecture diagrams, video tutorials, and hands-on practice for every module",
     institution: "Backend Engineering Course",
     format:
-      "16 easy-edition modules from networking and OS fundamentals through distributed systems, Kafka, Docker, Kubernetes, AWS, observability, and architecture patterns — each with mermaid diagrams, YouTube tutorials, and a hands-on task.",
+      "17 modules (Module 0 overview + Modules 1–16): networking and OS fundamentals through distributed systems, Kafka, Docker, Kubernetes, AWS, observability, and architecture patterns — each with mermaid diagrams, YouTube tutorials, and hands-on tasks.",
     prerequisites: [
       "Basic programming experience (you can build a simple API)",
       "Comfort using a terminal is helpful but not required",
     ],
     pace:
-      "~16–20 weeks at one module per week. Modules 7 (Kafka) and 10 (Kubernetes) deserve extra depth if you already have experience.",
-    moduleCount: 16,
+      "~17–21 weeks — start with Module 0 (overview map), then one module per week. Modules 7 (Kafka) and 10 (Kubernetes) deserve extra depth if you already have experience.",
+    moduleCount: 17,
     accent: "blue",
   },
 ];

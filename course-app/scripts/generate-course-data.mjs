@@ -163,6 +163,7 @@ function generateAgenticMemory() {
 // ─── Backend & Distributed Systems Course ───────────────────────────────────
 
 const BACKEND_LEVELS = {
+  0: "Foundation",
   1: "Foundation", 2: "Foundation", 3: "Foundation", 4: "Foundation",
   5: "Core", 6: "Core",
   7: "Intermediate", 8: "Intermediate", 9: "Intermediate", 10: "Intermediate",
@@ -171,6 +172,7 @@ const BACKEND_LEVELS = {
 };
 
 const BACKEND_DIAGRAMS = {
+  0: "learning-path",
   1: "learning-path", 2: "learning-path", 3: "learning-path", 4: "learning-path",
   5: "production-systems", 6: "production-systems", 7: "hybrid-retrieval",
   8: "hybrid-retrieval", 9: "setup", 10: "production-systems",
@@ -179,6 +181,7 @@ const BACKEND_DIAGRAMS = {
 };
 
 const BACKEND_TITLES = {
+  0: "Course Overview",
   1: "Networking",
   2: "Operating Systems",
   3: "Linux",
@@ -198,8 +201,9 @@ const BACKEND_TITLES = {
 };
 
 const BACKEND_COMPLETION = [
-  "Module 1: Traced a web request with curl and explained TCP vs UDP",
-  "Module 2: Observed CPU/memory with top/htop under load",
+  "Module 0: Reviewed full course map and traced a request through all layers",
+  "Module 1: Completed all 7 networking parts and mapped curl output to the lifecycle",
+  "Module 2: Completed all 7 OS parts and used top/htop to inspect processes and threads",
   "Module 3: Practiced Linux debugging commands on a remote server",
   "Module 4: Compared query performance with and without a database index",
   "Module 5: Drew a URL shortener design and discussed CAP trade-offs",
@@ -217,6 +221,11 @@ const BACKEND_COMPLETION = [
 ];
 
 function extractSimpleExplanation(body) {
+  const overview = body.match(/### Module overview\n([\s\S]*?)(?=\n---|\n###|$)/);
+  if (overview) {
+    const goal = overview[1].match(/\*\*Goal:\*\*\s*(.+)/);
+    if (goal) return goal[1].trim();
+  }
   const match = body.match(/### Simple explanation\n([\s\S]*?)(?=\n###|$)/);
   return match ? match[1].trim() : "";
 }
@@ -252,6 +261,49 @@ function extractCheckpointsEasy(body, id, title) {
   return checkpoints.slice(0, 4);
 }
 
+function extractCheckpointsStructuredModule(body, partCheckpoints, handsOnLabel) {
+  const checkpoints = [...partCheckpoints];
+  const partCount = (body.match(/^### Part \d+/gm) ?? []).length;
+  if (partCount > 0) {
+    checkpoints.unshift(`Completed all ${partCount} module parts`);
+  }
+  if (handsOnLabel) {
+    checkpoints.push(handsOnLabel);
+  }
+  if (body.includes("### 🎥 Video")) {
+    checkpoints.push("Watched at least one video tutorial for this module");
+  }
+  return checkpoints.slice(0, 7);
+}
+
+function extractCheckpointsOverview(body) {
+  return extractCheckpointsStructuredModule(body, [
+    "Reviewed the production system connection diagram",
+    "Understand the module learning path from 0 to 16",
+    "Skimmed all 16 topic maps — know what each module covers",
+    "Completed Part 7 checklist — ready to start Module 1",
+  ], "Optional: explained cache hit vs cache miss path in 30 seconds");
+}
+
+function extractCheckpointsNetworking(body) {
+  return extractCheckpointsStructuredModule(body, [
+    "Completed Part 1 — understand the big picture and request flow",
+    "Completed Parts 2–3 — IP, ports, OSI, TCP/UDP, and DNS",
+    "Completed Parts 4–5 — HTTP/S, TLS, REST, WebSockets, gRPC",
+    "Completed Parts 6–7 — proxy, load balancing, and full lifecycle",
+  ], "Hands-on done: curl, ping, and nslookup with layer mapping");
+}
+
+function extractCheckpointsOperatingSystems(body) {
+  return extractCheckpointsStructuredModule(body, [
+    "Completed Part 1 — OS role, process vs thread mental model",
+    "Completed Parts 2–3 — processes, threads, memory, and OOM",
+    "Completed Part 4 — locks, races, and deadlocks",
+    "Completed Parts 5–6 — scheduling, cgroups, file systems, I/O",
+    "Completed Part 7 — mapped a production symptom to an OS layer",
+  ], "Hands-on done: top/htop, ps, and per-thread CPU inspection");
+}
+
 function generateBackendDistributed() {
   const mdPath = findMarkdownPath([
     path.join(repoRoot, "Advanced Backend and Distributed System Design.md"),
@@ -259,7 +311,7 @@ function generateBackendDistributed() {
   ]);
   const content = fs.readFileSync(mdPath, "utf8");
 
-  const introEnd = content.indexOf("## Module 1:");
+  const introEnd = content.indexOf("## Module 0:");
   const mainContent = introEnd > 0 ? content.slice(introEnd) : content;
   const footerStart = mainContent.search(/^## Suggested Study Order/m);
   const modulesContent =
@@ -284,7 +336,14 @@ function generateBackendDistributed() {
       diagram: BACKEND_DIAGRAMS[id] || "learning-path",
       description,
       content: rest.trim(),
-      checkpoints: extractCheckpointsEasy(rest, id, title),
+      checkpoints:
+        id === 0
+          ? extractCheckpointsOverview(rest)
+          : id === 1
+            ? extractCheckpointsNetworking(rest)
+            : id === 2
+              ? extractCheckpointsOperatingSystems(rest)
+              : extractCheckpointsEasy(rest, id, title),
     });
   }
 
