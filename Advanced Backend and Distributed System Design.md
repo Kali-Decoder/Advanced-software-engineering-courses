@@ -476,6 +476,8 @@ Resource-oriented API design using HTTP verbs.
 | PUT/PATCH | Update | `PATCH /users/10` |
 | DELETE | Remove | `DELETE /users/10` |
 
+📖 **Further reading:** [APIs](https://lnkd.in/dsbwPZ6N) · [REST vs GraphQL](https://lnkd.in/gM5VHKQS)
+
 ---
 
 ### Part 5 — APIs & Real-Time Communication
@@ -486,6 +488,8 @@ Patterns beyond classic request/response — persistent connections and high-per
 HTTP closes after each response. **WebSocket** keeps a bidirectional channel open — server can push anytime.
 
 **Use cases:** chat, live notifications, dashboards, multiplayer games.
+
+📖 **Further reading:** [Long Polling vs WebSockets](https://lnkd.in/d9xKD28K)
 
 ```mermaid
 sequenceDiagram
@@ -511,6 +515,8 @@ How real systems handle scale, security at the edge, and performance.
 #### 13. Reverse Proxy
 Sits in front of backend servers — handles routing, TLS termination, caching, auth.
 
+📖 **Further reading:** [Proxy vs Reverse Proxy](https://lnkd.in/gMTtidBq)
+
 ```mermaid
 graph TD
     C[Clients] --> RP[Nginx / Traefik]
@@ -520,6 +526,8 @@ graph TD
 
 #### 14. Load Balancing
 Distributes traffic so no single server is overwhelmed.
+
+📖 **Further reading:** [Load Balancing](https://lnkd.in/gvxfwEUr)
 
 ```mermaid
 graph TD
@@ -573,6 +581,14 @@ flowchart TD
 ### 🎥 Video tutorials
 - **TCP/IP Made Super Easy for Beginners**: https://www.youtube.com/watch?v=LUxeuFz_GQo
 - **Zero to Hero: Networking Fundamentals Crash Course**: https://www.youtube.com/watch?v=ltBWJIhcjpA
+
+### 📚 Blog resources
+- **APIs**: https://lnkd.in/dsbwPZ6N
+- **Long Polling vs WebSockets**: https://lnkd.in/d9xKD28K
+- **Proxy vs Reverse Proxy**: https://lnkd.in/gMTtidBq
+- **Load Balancing**: https://lnkd.in/gvxfwEUr
+- **REST vs GraphQL**: https://lnkd.in/gM5VHKQS
+- **CDN**: https://lnkd.in/gaW4Vkpy
 
 ### 🛠️ Hands-on task
 1. `curl -v https://example.com` — find the TLS handshake and HTTP headers in the output.
@@ -711,6 +727,8 @@ flowchart LR
 
 When multiple threads touch shared data, you need rules — or you get corruption, races, and deadlocks.
 
+📖 **Further reading:** [Concurrency vs Parallelism](https://lnkd.in/gGZXhjBD)
+
 #### 8. Locks, Mutex & Semaphores
 - **Mutex** — only one thread at a time (mutual exclusion).
 - **Semaphore** — fixed number of concurrent accessors.
@@ -806,6 +824,9 @@ flowchart TD
 - **Operating Systems – Comprehensive Course for Beginners** (freeCodeCamp): https://www.youtube.com/watch?v=yK1uBHPdp30
 - **Process vs Thread explained** — search "Hussein Nasser process vs thread" for a short backend-focused take
 
+### 📚 Blog resources
+- **Concurrency vs Parallelism**: https://lnkd.in/gGZXhjBD
+
 ### 🛠️ Hands-on task
 1. Run `top` or `htop` while your app handles traffic — watch **CPU%**, **MEM%**, and **COMMAND** columns.
 2. Note your app's **PID** and run `ps -p <PID> -o pid,rss,vsz,threads` — see memory and thread count.
@@ -851,7 +872,9 @@ flowchart LR
 ## Module 4: Databases — Where Your Data Lives
 
 ### Simple explanation
-A database is where your app's data (users, orders, messages) is stored safely, so it's still there after your app restarts. Different databases are good at different things — some are great for structured data (SQL), some for flexible or huge-scale data (NoSQL).
+A database is where your app's data (users, orders, messages) is stored safely, so it's still there after your app restarts. Different databases are good at different things — some are great for structured data (**SQL**), some for flexible or huge-scale data (**NoSQL**).
+
+📖 **Further reading:** [SQL vs NoSQL](https://lnkd.in/gHyC9qWc)
 
 ### Real-life example
 Think of a SQL database (like Postgres) as a well-organized filing cabinet with labeled folders — great when your data has a clear structure (like customer records). Think of a NoSQL database (like MongoDB) as a big box where you can just throw in documents of different shapes — more flexible, but less strict.
@@ -868,14 +891,21 @@ graph LR
 ```
 
 ### Key words in simple terms
-- **Index**: a shortcut list that helps the database find data fast, like the index at the back of a book.
-- **Transaction**: a group of steps that must all succeed together, or none happen at all. *Example: moving money from Account A to Account B — you never want money to disappear if the app crashes mid-transfer.*
+- **[Index](https://lnkd.in/g_-bQWtA)**: a shortcut list that helps the database find data fast, like the index at the back of a book.
+- **[Transaction / ACID](https://lnkd.in/dB3QHiMz)**: a group of steps that must all succeed together, or none happen at all. *Example: moving money from Account A to Account B — you never want money to disappear if the app crashes mid-transfer.*
 - **Replication**: keeping copies of your data on other machines, so if one machine dies, you don't lose data.
-- **Sharding**: splitting a huge dataset across many machines, because one machine can't hold it all.
+- **[Sharding](https://lnkd.in/g9mc-d5m)**: splitting a huge dataset across many machines, because one machine can't hold it all.
 
 ### 🎥 Video tutorial
 - Search YouTube for **"Learn Databases In-Depth – freeCodeCamp"** (4-hour full course covering transactions, indexing, and storage engines).
 - Also great: search **"Database Indexing Explained (with PostgreSQL) – Hussein Nasser"** for a focused 15-minute video on indexing specifically.
+
+### 📚 Blog resources
+- **SQL vs NoSQL**: https://lnkd.in/gHyC9qWc
+- **ACID Transactions**: https://lnkd.in/dB3QHiMz
+- **Database Indexes**: https://lnkd.in/g_-bQWtA
+- **Database Sharding**: https://lnkd.in/g9mc-d5m
+- **CDC (Change Data Capture)**: https://lnkd.in/gWhGwh9Z
 
 ### 🛠️ Hands-on task
 1. Install Postgres locally (or use a free online sandbox like [db-fiddle.com](https://www.db-fiddle.com)).
@@ -892,7 +922,7 @@ graph LR
 This module teaches you the words engineers use when designing large systems — the kind of vocabulary you need in interviews and real architecture discussions.
 
 ### Real-life example
-**CAP Theorem** is the big one. Imagine WhatsApp has two servers in two different cities, and the network cable between the cities is cut (a "partition"). Now WhatsApp has to choose:
+**[CAP Theorem](https://lnkd.in/g_tFqJJb)** is the big one. Imagine WhatsApp has two servers in two different cities, and the network cable between the cities is cut (a "partition"). Now WhatsApp has to choose:
 - **Option A (Consistency)**: stop responding until the cities can talk again, so no messages are lost or out of order.
 - **Option B (Availability)**: keep working on both sides, even if the message history might briefly be slightly different in each city.
 
@@ -909,14 +939,24 @@ graph TD
 ```
 
 ### Key words in simple terms
-- **Horizontal scaling**: add more machines (like adding more cashiers at a store).
+- **[Scalability](https://lnkd.in/gPGhW-qK) / Horizontal scaling**: add more machines (like adding more cashiers at a store).
 - **Vertical scaling**: make one machine bigger and stronger (like giving one cashier superpowers).
-- **Stateless service**: a server that doesn't remember you between requests — any server can handle any request. Easy to scale.
-- **Eventual consistency**: data will be correct "eventually," but maybe not the exact second you wrote it.
+- **[Stateless vs Stateful Architecture](https://lnkd.in/gz_ccK-Y)**: a stateless service doesn't remember you between requests — any server can handle any request. Easy to scale.
+- **[Availability](https://lnkd.in/gQk2p4_6)**: the system keeps responding even when parts fail — no total downtime for users.
+- **[SPOF (Single Point of Failure)](https://lnkd.in/gw_uHZWn)**: one component that, if it dies, takes the whole system down — always design to eliminate these.
+- **[Strong vs Eventual Consistency](https://lnkd.in/gCc5cNdE)**: data will be correct "eventually," but maybe not the exact second you wrote it.
 
 ### 🎥 Video tutorials
 - **Gaurav Sen's full System Design playlist** (start from video 1 and go in order): https://www.youtube.com/playlist?list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX
 - **CAP Theorem explained simply**: https://www.youtube.com/watch?v=prUs7I-TIMw
+
+### 📚 Blog resources
+- **Scalability**: https://lnkd.in/gPGhW-qK
+- **Availability**: https://lnkd.in/gQk2p4_6
+- **SPOF (Single Point of Failure)**: https://lnkd.in/gw_uHZWn
+- **CAP Theorem**: https://lnkd.in/g_tFqJJb
+- **Strong vs Eventual Consistency**: https://lnkd.in/gCc5cNdE
+- **Stateful vs Stateless Architecture**: https://lnkd.in/gz_ccK-Y
 
 ### 🛠️ Hands-on task
 1. Draw (on paper or in a tool like Excalidraw) a simple design for "a URL shortener" (like bit.ly): one API server, one database, one cache.
@@ -956,13 +996,17 @@ graph TD
 ```
 
 ### Key words in simple terms
-- **Idempotency**: doing something twice has the same effect as doing it once. *Example: Stripe payment API — if your app accidentally sends the same "charge $10" request twice due to a network glitch, idempotency keys make sure the customer is only charged once.*
+- **[Idempotency](https://lnkd.in/gDB3AJij)**: doing something twice has the same effect as doing it once. *Example: Stripe payment API — if your app accidentally sends the same "charge $10" request twice due to a network glitch, idempotency keys make sure the customer is only charged once.*
 - **Consensus (Raft/Paxos)**: how multiple machines agree on one answer, even if some of them fail. Kubernetes uses this (via etcd) to keep track of what's running in your cluster.
 - **Saga pattern**: breaking one big multi-step transaction (like "book flight + book hotel + charge card") into smaller steps, with a plan to undo earlier steps if a later one fails.
 
 ### 🎥 Video tutorials
 - **ByteByteGo YouTube channel** — search "ByteByteGo circuit breaker" or "ByteByteGo consistent hashing": https://www.youtube.com/@ByteByteGo
 - **Gaurav Sen — Raft/Consensus explained**: search "Gaurav Sen Raft consensus" on his channel (link above in Module 5).
+
+### 📚 Blog resources
+- **Idempotency**: https://lnkd.in/gDB3AJij
+- **Consistent Hashing**: https://lnkd.in/gR9wFDpz
 
 ### 🛠️ Hands-on task
 1. Pick any API you use at work or in a side project.
@@ -976,7 +1020,9 @@ graph TD
 *Since you already use Kafka, treat this module as "level up," not "start from zero."*
 
 ### Simple explanation
-Instead of Service A calling Service B directly (and waiting), Service A can drop a message into a queue, and Service B picks it up whenever it's ready. This decouples services — they don't need to be online at the same exact moment.
+Instead of Service A calling Service B directly (and waiting), Service A can drop a message into a **[message queue](https://lnkd.in/g-jnNGDC)**, and Service B picks it up whenever it's ready. This decouples services — they don't need to be online at the same exact moment.
+
+📖 **Further reading:** [Batch vs Stream Processing](https://lnkd.in/gKtj_qWh) · [CDC (Change Data Capture)](https://lnkd.in/gWhGwh9Z)
 
 ### Real-life example
 Think of Kafka like a post office with numbered mailboxes (**partitions**). A producer (like an "OrderPlaced" event from your checkout service) drops a letter into a mailbox. Multiple readers (**consumers** — billing, shipping, notifications) can each check their own copy of the mailbox and react independently, without the order service needing to know or care who's listening.
@@ -1000,6 +1046,11 @@ graph LR
 - **Confluent's official "Apache Kafka 101" course** (made by the creators of Kafka's parent company — the most authoritative source): search "Confluent Apache Kafka 101" or visit developer.confluent.io/courses/apache-kafka
 - **Apache Kafka Crash Course by Hussein Nasser**: search "Hussein Nasser Kafka Crash Course" on YouTube (short, practical, with a live coding demo).
 
+### 📚 Blog resources
+- **Message Queues**: https://lnkd.in/g-jnNGDC
+- **Batch vs Stream Processing**: https://lnkd.in/gKtj_qWh
+- **CDC (Change Data Capture)**: https://lnkd.in/gWhGwh9Z
+
 ### 🛠️ Hands-on task (since you already use Kafka)
 1. Take a topic you already use at work. Write down: how many partitions does it have? What key do you use to decide which partition a message goes to?
 2. Deliberately think through: "If I double the number of partitions, does my ordering guarantee break?" (Hint: yes, if you're relying on a global order across the whole topic — this is a very common real production bug.)
@@ -1010,7 +1061,9 @@ graph LR
 ## Module 8: Caching — Making Things Fast
 
 ### Simple explanation
-A cache is a small, fast storage layer that keeps a copy of data you've recently used, so next time you don't have to go all the way to the (slower) database.
+A **[cache](https://lnkd.in/gBSeTstS)** is a small, fast storage layer that keeps a copy of data you've recently used, so next time you don't have to go all the way to the (slower) database.
+
+📖 **Further reading:** [Caching Strategies](https://lnkd.in/dVk7nZ_Y) · [Cache Eviction Policies](https://lnkd.in/gQAEXEmq) · [CDN](https://lnkd.in/gaW4Vkpy)
 
 ### Real-life example
 Imagine you're cooking and you keep the salt on the counter instead of walking to the pantry every time. That's a cache — quick access to something you use often. But if someone changes the recipe (the "real" data in the database) and you don't update your counter salt (the cache), you might use the wrong amount — that's a **cache invalidation** bug.
@@ -1039,6 +1092,12 @@ sequenceDiagram
 
 ### 🎥 Video tutorial
 - Search YouTube for **"Redis caching strategies explained"** or **"Hussein Nasser caching"** for practical, backend-focused explanations.
+
+### 📚 Blog resources
+- **Caching**: https://lnkd.in/gBSeTstS
+- **Caching Strategies**: https://lnkd.in/dVk7nZ_Y
+- **Cache Eviction Policies**: https://lnkd.in/gQAEXEmq
+- **CDN**: https://lnkd.in/gaW4Vkpy
 
 ### 🛠️ Hands-on task
 1. Install Redis locally (or use a free Redis cloud sandbox).
@@ -1202,10 +1261,10 @@ graph TD
 ## Module 13: API Design — How Services Talk to Clients
 
 ### Simple explanation
-An API is the "menu" your service offers to the outside world — what data can be requested, and how.
+An **[API](https://lnkd.in/dsbwPZ6N)** is the "menu" your service offers to the outside world — what data can be requested, and how.
 
 ### Real-life example
-**REST** is like a restaurant menu — fixed dishes (endpoints), you order what's on the menu. **GraphQL** is more like a buffet — you pick exactly the ingredients (fields) you want, nothing more, nothing less, in one trip. Facebook built GraphQL because their mobile app was making too many separate "menu orders" (REST calls) per screen.
+**REST** is like a restaurant menu — fixed dishes (endpoints), you order what's on the menu. **[GraphQL](https://lnkd.in/gM5VHKQS)** is more like a buffet — you pick exactly the ingredients (fields) you want, nothing more, nothing less, in one trip. Facebook built GraphQL because their mobile app was making too many separate "menu orders" (REST calls) per screen.
 
 ### Diagram: REST vs GraphQL
 ```mermaid
@@ -1221,13 +1280,22 @@ graph LR
 ```
 
 ### Key words in simple terms
-- **JWT**: a signed token that proves who you are, without the server needing to check a database every time.
+- **[JWT](https://lnkd.in/ghtXYRqU)**: a signed token that proves who you are, without the server needing to check a database every time.
 - **OAuth**: lets you log into an app using your Google/Facebook account, without giving that app your password.
-- **Rate limiting**: capping how many requests one user/client can make, to prevent abuse.
+- **[Rate Limiting](https://lnkd.in/gYDxg8XY)**: capping how many requests one user/client can make, to prevent abuse.
+- **[Webhooks](https://lnkd.in/geHxGX-7)**: your server registers a callback URL; when an event happens elsewhere (e.g. a payment succeeds), the other service POSTs to your URL automatically — push instead of poll.
 
 ### 🎥 Video tutorial
 - Search YouTube for **"REST API design freeCodeCamp full course"**.
 - **ByteByteGo** channel has short, visual videos comparing REST vs GraphQL vs gRPC and explaining JWT/OAuth flows: https://www.youtube.com/@ByteByteGo
+
+### 📚 Blog resources
+- **APIs**: https://lnkd.in/dsbwPZ6N
+- **JWTs**: https://lnkd.in/ghtXYRqU
+- **Webhooks**: https://lnkd.in/geHxGX-7
+- **Rate Limiting Algorithms**: https://lnkd.in/gYDxg8XY
+- **REST vs GraphQL**: https://lnkd.in/gM5VHKQS
+- **API Gateways**: https://lnkd.in/gtyXmvf4
 
 ### 🛠️ Hands-on task
 1. Build a tiny REST API with 3 endpoints (`GET /users`, `GET /users/:id`, `POST /users`).
@@ -1261,6 +1329,9 @@ flowchart LR
 
 ### 🎥 Video tutorial
 - Search YouTube for **"OWASP Top 10 explained"** and **"JWT security mistakes"** for practical, real-world security lessons.
+
+### 📚 Blog resources
+- **JWTs**: https://lnkd.in/ghtXYRqU
 
 ### 🛠️ Hands-on task
 1. Look at any project you've built — search your code for hardcoded passwords or API keys.
@@ -1296,12 +1367,16 @@ graph TD
 
 ### Key words in simple terms
 - **Event-driven architecture**: services react to events instead of calling each other directly (uses message queues like Kafka).
-- **API Gateway**: one "front door" that routes traffic to the right microservice — like a hotel receptionist directing guests to the right room.
+- **[API Gateway](https://lnkd.in/gtyXmvf4)**: one "front door" that routes traffic to the right microservice — like a hotel receptionist directing guests to the right room.
 - **Outbox pattern**: makes sure that when you save something to the database AND publish an event about it, both things happen together reliably (a very common real-world bug source when done wrong).
 
 ### 🎥 Video tutorial
 - **ByteByteGo** channel: search "ByteByteGo microservices" or "ByteByteGo event-driven architecture": https://www.youtube.com/@ByteByteGo
 - **CodeOpinion** channel: search "CodeOpinion outbox pattern" for a focused, practical explanation.
+
+### 📚 Blog resources
+- **API Gateways**: https://lnkd.in/gtyXmvf4
+- **Stateful vs Stateless Architecture**: https://lnkd.in/gz_ccK-Y
 
 ### 🛠️ Hands-on task
 1. Take one feature from a monolith app you've worked on (or a sample project) and sketch how you'd split it into 2-3 microservices.
@@ -1315,7 +1390,7 @@ graph TD
 These are clever tricks that make distributed systems fast and reliable, even with huge amounts of data spread across many machines.
 
 ### Real-life example
-**Consistent Hashing** solves a real problem: imagine you have 10 servers storing cached data, split by `hash(key) % 10`. If you add an 11th server, almost ALL your data suddenly maps to a different server — a disaster. Consistent hashing (used by Amazon's Dynamo, and later Cassandra and DynamoDB) fixes this so adding/removing one server only moves a small slice of data, not everything.
+**[Consistent Hashing](https://lnkd.in/gR9wFDpz)** solves a real problem: imagine you have 10 servers storing cached data, split by `hash(key) % 10`. If you add an 11th server, almost ALL your data suddenly maps to a different server — a disaster. Consistent hashing (used by Amazon's Dynamo, and later Cassandra and DynamoDB) fixes this so adding/removing one server only moves a small slice of data, not everything.
 
 ### Diagram: consistent hashing ring
 ```mermaid
@@ -1328,12 +1403,16 @@ graph TD
 ```
 
 ### Key words in simple terms
-- **Bloom Filter**: a tiny, super-fast "maybe yes / definitely no" checker. *Example: Cassandra uses it to quickly check "does this key possibly exist on disk?" before doing an expensive disk read.*
+- **[Bloom Filter](https://lnkd.in/gfGjCrSZ)**: a tiny, super-fast "maybe yes / definitely no" checker. *Example: Cassandra uses it to quickly check "does this key possibly exist on disk?" before doing an expensive disk read.*
 - **Gossip Protocol**: instead of one central manager, nodes randomly tell a few neighbors "here's my status," and information spreads across the whole cluster over time — like rumors spreading in a school.
 - **Distributed Lock**: making sure only ONE server does a specific job at a time, even though many servers could try. *Example: making sure only one instance of a scheduled nightly job actually runs, even if you have 5 copies of your app deployed.*
 
 ### 🎥 Video tutorial
 - **Gaurav Sen** channel: search "Gaurav Sen consistent hashing" and "Gaurav Sen bloom filter" for focused whiteboard explanations.
+
+### 📚 Blog resources
+- **Consistent Hashing**: https://lnkd.in/gR9wFDpz
+- **Bloom Filters**: https://lnkd.in/gfGjCrSZ
 
 ### 🛠️ Hands-on task
 1. On paper, draw a hash ring with 4 servers.

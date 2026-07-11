@@ -16,7 +16,30 @@ function writeJson(relativeOut, data) {
   const outPath = path.resolve(__dirname, "..", relativeOut);
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
   fs.writeFileSync(outPath, JSON.stringify(data, null, 2));
-  console.log(`  → ${relativeOut} (${data.modules.length} modules)`);
+  const label =
+    Array.isArray(data)
+      ? `${data.length} items`
+      : data.modules
+        ? `${data.modules.length} modules`
+        : "ok";
+  console.log(`  → ${relativeOut} (${label})`);
+}
+
+function extractBlogResources(content) {
+  const pattern = /^- \*\*(.+?)\*\*: (https:\/\/lnkd\.in\/[^\s]+)/gm;
+  const byTerm = new Map();
+
+  for (const match of content.matchAll(pattern)) {
+    const term = match[1].trim();
+    const url = match[2].trim();
+    if (!byTerm.has(term)) {
+      byTerm.set(term, url);
+    }
+  }
+
+  return Array.from(byTerm.entries(), ([term, url]) => ({ term, url })).sort(
+    (a, b) => a.term.localeCompare(b.term)
+  );
 }
 
 // ─── Agentic Memory Course ───────────────────────────────────────────────────
@@ -351,6 +374,11 @@ function generateBackendDistributed() {
     completionChecklist: BACKEND_COMPLETION,
     modules,
   });
+
+  writeJson(
+    "lib/course/backend-distributed-systems/blog-resources.json",
+    extractBlogResources(content)
+  );
 }
 
 console.log("Generating course data…");

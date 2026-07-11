@@ -1,0 +1,122 @@
+[
+  {
+    "term": "ACID Transactions",
+    "url": "https://lnkd.in/dB3QHiMz"
+  },
+  {
+    "term": "API Gateways",
+    "url": "https://lnkd.in/gtyXmvf4"
+  },
+  {
+    "term": "APIs",
+    "url": "https://lnkd.in/dsbwPZ6N"
+  },
+  {
+    "term": "Availability",
+    "url": "https://lnkd.in/gQk2p4_6"
+  },
+  {
+    "term": "Batch vs Stream Processing",
+    "url": "https://lnkd.in/gKtj_qWh"
+  },
+  {
+    "term": "Bloom Filters",
+    "url": "https://lnkd.in/gfGjCrSZ"
+  },
+  {
+    "term": "Cache Eviction Policies",
+    "url": "https://lnkd.in/gQAEXEmq"
+  },
+  {
+    "term": "Caching",
+    "url": "https://lnkd.in/gBSeTstS"
+  },
+  {
+    "term": "Caching Strategies",
+    "url": "https://lnkd.in/dVk7nZ_Y"
+  },
+  {
+    "term": "CAP Theorem",
+    "url": "https://lnkd.in/g_tFqJJb"
+  },
+  {
+    "term": "CDC (Change Data Capture)",
+    "url": "https://lnkd.in/gWhGwh9Z"
+  },
+  {
+    "term": "CDN",
+    "url": "https://lnkd.in/gaW4Vkpy"
+  },
+  {
+    "term": "Concurrency vs Parallelism",
+    "url": "https://lnkd.in/gGZXhjBD"
+  },
+  {
+    "term": "Consistent Hashing",
+    "url": "https://lnkd.in/gR9wFDpz"
+  },
+  {
+    "term": "Database Indexes",
+    "url": "https://lnkd.in/g_-bQWtA"
+  },
+  {
+    "term": "Database Sharding",
+    "url": "https://lnkd.in/g9mc-d5m"
+  },
+  {
+    "term": "Idempotency",
+    "url": "https://lnkd.in/gDB3AJij"
+  },
+  {
+    "term": "JWTs",
+    "url": "https://lnkd.in/ghtXYRqU"
+  },
+  {
+    "term": "Load Balancing",
+    "url": "https://lnkd.in/gvxfwEUr"
+  },
+  {
+    "term": "Long Polling vs WebSockets",
+    "url": "https://lnkd.in/d9xKD28K"
+  },
+  {
+    "term": "Message Queues",
+    "url": "https://lnkd.in/g-jnNGDC"
+  },
+  {
+    "term": "Proxy vs Reverse Proxy",
+    "url": "https://lnkd.in/gMTtidBq"
+  },
+  {
+    "term": "Rate Limiting Algorithms",
+    "url": "https://lnkd.in/gYDxg8XY"
+  },
+  {
+    "term": "REST vs GraphQL",
+    "url": "https://lnkd.in/gM5VHKQS"
+  },
+  {
+    "term": "Scalability",
+    "url": "https://lnkd.in/gPGhW-qK"
+  },
+  {
+    "term": "SPOF (Single Point of Failure)",
+    "url": "https://lnkd.in/gw_uHZWn"
+  },
+  {
+    "term": "SQL vs NoSQL",
+    "url": "https://lnkd.in/gHyC9qWc"
+  },
+  {
+    "term": "Stateful vs Stateless Architecture",
+    "url": "https://lnkd.in/gz_ccK-Y"
+  },
+  {
+    "term": "Strong vs Eventual Consistency",
+    "url": "https://lnkd.in/gCc5cNdE"
+  },
+  {
+    "term": "Webhooks",
+    "url": "https://lnkd.in/geHxGX-7"
+  }
+]
