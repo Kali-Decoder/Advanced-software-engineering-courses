@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Crimson_Pro, Source_Sans_3 } from "next/font/google";
+import { NavigationProgress } from "@/components/loading/NavigationProgress";
 import { ProgressProvider } from "@/context/ProgressContext";
 import "./globals.css";
 
@@ -29,7 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${crimson.variable} ${sourceSans.variable} h-full`}>
       <body className="flex min-h-full flex-col bg-white font-sans text-neutral-950 antialiased">
-        <ProgressProvider>{children}</ProgressProvider>
+        <ProgressProvider>
+          <NavigationProgress />
+          {children}
+        </ProgressProvider>
       </body>
     </html>
   );

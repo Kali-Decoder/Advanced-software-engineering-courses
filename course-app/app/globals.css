@@ -92,6 +92,41 @@ body {
   100% { background-position: 200% 0; }
 }
 
+@keyframes skeleton-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    #f5f5f5 0%,
+    #ebebeb 45%,
+    #e5e5e5 50%,
+    #ebebeb 55%,
+    #f5f5f5 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+.skeleton-shimmer-dark {
+  background: linear-gradient(
+    90deg,
+    #262626 0%,
+    #333333 45%,
+    #404040 50%,
+    #333333 55%,
+    #262626 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+}
+
+.navigation-progress-bar {
+  box-shadow: 0 0 12px rgba(10, 10, 10, 0.35);
+}
+
 .tab-active {
   position: relative;
   background: var(--ink) !important;

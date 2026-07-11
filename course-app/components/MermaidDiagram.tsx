@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { LoadingSpinner } from "@/components/loading/LoadingSpinner";
+import { Skeleton } from "@/components/loading/Skeleton";
 import { DiagramFullscreen, MaximizeButton } from "./DiagramFullscreen";
 
 interface MermaidDiagramProps {
@@ -104,11 +106,14 @@ export function MermaidDiagram({ chart, title }: MermaidDiagramProps) {
           }`}
         />
         {!ready && !error && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center">
-            <div className="flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 py-2 text-sm text-neutral-500 shadow-sm">
-              <span className="h-4 w-4 animate-spin rounded-full border-2 border-neutral-200 border-t-neutral-950" />
-              Rendering diagram…
+          <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 p-6">
+            <div className="w-full max-w-md space-y-3">
+              <Skeleton className="mx-auto h-24 w-24 rounded-full" />
+              <Skeleton className="h-3 w-full" />
+              <Skeleton className="h-3 w-4/5 mx-auto" />
+              <Skeleton className="h-3 w-3/5 mx-auto" />
             </div>
+            <LoadingSpinner size="sm" label="Rendering diagram…" />
           </div>
         )}
         {error && (

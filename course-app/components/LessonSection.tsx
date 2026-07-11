@@ -122,14 +122,16 @@ function SubmoduleCard({
           open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
         }`}
       >
-        <div className="overflow-hidden">
-          <div className="border-t border-neutral-100 px-4 pb-4 pt-3 sm:px-5">
-            <MarkdownContent
-              content={submodule.content}
-              variant="submodule"
-              sectionTitle={submodule.title}
-            />
-          </div>
+        <div className="min-h-0 overflow-hidden">
+          {open ? (
+            <div className="border-t border-neutral-100 px-4 pb-4 pt-3 sm:px-5">
+              <MarkdownContent
+                content={submodule.content}
+                variant="submodule"
+                sectionTitle={submodule.title}
+              />
+            </div>
+          ) : null}
         </div>
       </div>
     </article>
@@ -283,28 +285,30 @@ export function LessonSectionCard({
           open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
         }`}
       >
-        <div className="overflow-hidden">
-          <div
-            className={`border-t px-5 pb-6 pt-4 sm:px-6 sm:pb-8 ${
-              section.type === "part"
-                ? "border-indigo-100 bg-white/70"
-                : "border-neutral-100"
-            }`}
-          >
-            {section.content ? (
-              <MarkdownContent
-                content={section.content}
-                variant={section.type}
-                sectionTitle={section.title}
-              />
-            ) : null}
-            {section.submodules?.length ? (
-              <SubmoduleGrid
-                submodules={section.submodules}
-                partNumber={section.partNumber}
-              />
-            ) : null}
-          </div>
+        <div className="min-h-0 overflow-hidden">
+          {open ? (
+            <div
+              className={`border-t px-5 pb-6 pt-4 sm:px-6 sm:pb-8 ${
+                section.type === "part"
+                  ? "border-indigo-100 bg-white/70"
+                  : "border-neutral-100"
+              }`}
+            >
+              {section.content ? (
+                <MarkdownContent
+                  content={section.content}
+                  variant={section.type}
+                  sectionTitle={section.title}
+                />
+              ) : null}
+              {section.submodules?.length ? (
+                <SubmoduleGrid
+                  submodules={section.submodules}
+                  partNumber={section.partNumber}
+                />
+              ) : null}
+            </div>
+          ) : null}
         </div>
       </div>
     </section>

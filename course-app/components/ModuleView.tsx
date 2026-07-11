@@ -18,6 +18,7 @@ import { CheckpointList } from "./CheckpointList";
 import { Diagram } from "./Diagram";
 import { LevelBadge } from "./LevelBadge";
 import { LessonReader } from "./LessonReader";
+import { Skeleton } from "./loading/Skeleton";
 import { MermaidDiagram } from "./MermaidDiagram";
 import { ProgressBar } from "./ProgressBar";
 import { ScrollProgress } from "./ScrollProgress";
@@ -86,14 +87,23 @@ export function ModuleView({ module }: { module: Module }) {
               </h2>
               <p className="mt-2 max-w-2xl text-neutral-500">{module.description}</p>
             </div>
-            <div className="rounded-lg border border-neutral-200 bg-neutral-50 px-5 py-3 text-center">
-              <p className="font-mono text-2xl font-bold text-neutral-950">{pct}%</p>
-              <p className="text-[0.65rem] uppercase tracking-wider text-neutral-400">
-                complete
-              </p>
+            <div className="rounded-lg border border-neutral-200 bg-white px-5 py-3 text-center">
+              {!hydrated ? (
+                <>
+                  <Skeleton className="mx-auto h-8 w-16" />
+                  <Skeleton className="mx-auto mt-2 h-3 w-20" />
+                </>
+              ) : (
+                <>
+                  <p className="font-mono text-2xl font-bold text-neutral-950">{pct}%</p>
+                  <p className="text-[0.65rem] uppercase tracking-wider text-neutral-400">
+                    complete
+                  </p>
+                </>
+              )}
             </div>
           </div>
-          <ProgressBar percent={pct} shimmer={pct > 0} className="mt-5" />
+          <ProgressBar percent={hydrated ? pct : 0} shimmer={hydrated && pct > 0} className="mt-5" />
         </header>
 
         <div className="mb-8 flex gap-1 rounded-lg border border-neutral-200 bg-neutral-50 p-1">
@@ -113,66 +123,51 @@ export function ModuleView({ module }: { module: Module }) {
           ))}
         </div>
 
-        <div className="grid w-full min-w-0">
-          <article
-            className={`col-start-1 row-start-1 w-full min-w-0 ${
-              activeTab !== "lesson"
-                ? "invisible pointer-events-none"
-                : "relative z-10"
-            }`}
-            aria-hidden={activeTab !== "lesson"}
-          >
-            <LessonReader content={module.content} />
-          </article>
+        <div className="w-full min-w-0">
+          {activeTab === "lesson" && (
+            <article className="w-full min-w-0">
+              <LessonReader content={module.content} />
+            </article>
+          )}
 
-          <article
-            className={`col-start-1 row-start-1 w-full min-w-0 rounded-xl border border-neutral-200 bg-white p-6 lg:p-8 ${
-              activeTab !== "diagram"
-                ? "invisible pointer-events-none"
-                : "relative z-10"
-            }`}
-            aria-hidden={activeTab !== "diagram"}
-          >
-            <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-neutral-400">
-              {mermaidCharts.length ? "Architecture Diagrams" : "Concept Diagram"}
-            </h3>
-            <div className="w-full min-w-0 max-w-full space-y-6 overflow-hidden">
-              {mermaidCharts.length > 0 ? (
-                mermaidCharts.map((chart, i) => (
-                  <MermaidDiagram
-                    key={i}
-                    chart={chart}
-                    title={
-                      mermaidCharts.length > 1
-                        ? `Diagram ${i + 1} of ${mermaidCharts.length}`
-                        : module.title
-                    }
-                  />
-                ))
-              ) : (
-                <div className="rounded-lg border border-neutral-100 bg-neutral-50 p-6">
-                  <Diagram name={module.diagram} />
-                </div>
-              )}
-            </div>
-          </article>
+          {activeTab === "diagram" && (
+            <article className="w-full min-w-0 rounded-xl border border-neutral-200 bg-white p-6 lg:p-8">
+              <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-neutral-400">
+                {mermaidCharts.length ? "Architecture Diagrams" : "Concept Diagram"}
+              </h3>
+              <div className="w-full min-w-0 max-w-full space-y-6 overflow-hidden">
+                {mermaidCharts.length > 0 ? (
+                  mermaidCharts.map((chart, i) => (
+                    <MermaidDiagram
+                      key={i}
+                      chart={chart}
+                      title={
+                        mermaidCharts.length > 1
+                          ? `Diagram ${i + 1} of ${mermaidCharts.length}`
+                          : module.title
+                      }
+                    />
+                  ))
+                ) : (
+                  <div className="rounded-lg border border-neutral-100 bg-neutral-50 p-6">
+                    <Diagram name={module.diagram} />
+                  </div>
+                )}
+              </div>
+            </article>
+          )}
 
-          <article
-            className={`col-start-1 row-start-1 w-full min-w-0 rounded-xl border border-neutral-200 bg-white p-6 lg:p-8 ${
-              activeTab !== "checkpoint"
-                ? "invisible pointer-events-none"
-                : "relative z-10"
-            }`}
-            aria-hidden={activeTab !== "checkpoint"}
-          >
-            <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-neutral-400">
-              Checkpoint
-            </h3>
-            <CheckpointList
-              module={module}
-              onUpdate={() => setTick((t) => t + 1)}
-            />
-          </article>
+          {activeTab === "checkpoint" && (
+            <article className="w-full min-w-0 rounded-xl border border-neutral-200 bg-white p-6 lg:p-8">
+              <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-neutral-400">
+                Checkpoint
+              </h3>
+              <CheckpointList
+                module={module}
+                onUpdate={() => setTick((t) => t + 1)}
+              />
+            </article>
+          )}
         </div>
 
         <nav className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-neutral-200 pt-8">

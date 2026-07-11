@@ -12,6 +12,7 @@ import { useCourseContext } from "@/context/CourseContext";
 import { useCourseProgress } from "@/context/ProgressContext";
 import { useAnimatedNumber } from "@/hooks/useAnimatedNumber";
 import { BlogResourcesModal } from "./BlogResourcesModal";
+import { Skeleton } from "./loading/Skeleton";
 import { ProgressBar } from "./ProgressBar";
 import { ProgressRing } from "./ProgressRing";
 
@@ -64,19 +65,31 @@ export function Header() {
           </div>
 
           <div className="flex items-center gap-5 animate-fade-up stagger-2">
-            <div className="hidden min-w-[200px] sm:block">
-              <div className="mb-2 flex items-baseline justify-between text-xs uppercase tracking-wider text-neutral-500">
-                <span>Progress</span>
-                <span className="font-mono text-lg font-semibold text-white">
-                  {animatedPercent}%
-                </span>
+            {!hydrated ? (
+              <div className="hidden min-w-[200px] sm:block">
+                <Skeleton className="mb-2 h-3 w-20" variant="dark" />
+                <Skeleton className="h-2 w-52" variant="dark" />
+                <Skeleton className="mt-2 h-3 w-28" variant="dark" />
               </div>
-              <ProgressBar percent={percent} variant="dark" />
-              <p className="mt-2 text-xs text-neutral-500">
-                {done} / {total} checkpoints
-              </p>
-            </div>
-            <ProgressRing percent={animatedPercent} size={68} strokeWidth={3} variant="dark" />
+            ) : (
+              <div className="hidden min-w-[200px] sm:block">
+                <div className="mb-2 flex items-baseline justify-between text-xs uppercase tracking-wider text-neutral-500">
+                  <span>Progress</span>
+                  <span className="font-mono text-lg font-semibold text-white">
+                    {animatedPercent}%
+                  </span>
+                </div>
+                <ProgressBar percent={percent} variant="dark" />
+                <p className="mt-2 text-xs text-neutral-500">
+                  {done} / {total} checkpoints
+                </p>
+              </div>
+            )}
+            {!hydrated ? (
+              <Skeleton className="h-[68px] w-[68px] rounded-full" variant="dark" />
+            ) : (
+              <ProgressRing percent={animatedPercent} size={68} strokeWidth={3} variant="dark" />
+            )}
           </div>
         </div>
       </header>

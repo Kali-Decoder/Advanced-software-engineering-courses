@@ -8,6 +8,7 @@ import {
   groupSectionsForTOC,
   parseLessonSections,
 } from "@/lib/parse-lesson";
+import { LessonReaderLoader } from "@/components/loading/PageLoaders";
 import {
   LessonSectionCard,
   LessonTOC,
@@ -19,6 +20,8 @@ interface LessonReaderProps {
 }
 
 export function LessonReader({ content }: LessonReaderProps) {
+  const [contentReady, setContentReady] = useState(false);
+
   const sections = useMemo(() => parseLessonSections(content), [content]);
   const tocGroups = useMemo(() => groupSectionsForTOC(sections), [sections]);
   const totalSections = useMemo(
@@ -38,6 +41,23 @@ export function LessonReader({ content }: LessonReaderProps) {
   const [activeId, setActiveId] = useState<string | null>(
     sections[0]?.id ?? null
   );
+
+  useEffect(() => {
+    setContentReady(false);
+    const start = Date.now();
+    let timer: number | undefined;
+
+    const frame = requestAnimationFrame(() => {
+      const elapsed = Date.now() - start;
+      const delay = Math.max(0, 320 - elapsed);
+      timer = window.setTimeout(() => setContentReady(true), delay);
+    });
+
+    return () => {
+      cancelAnimationFrame(frame);
+      if (timer !== undefined) window.clearTimeout(timer);
+    };
+  }, [content]);
 
   useEffect(() => {
     const defaultOpen = sections
@@ -98,6 +118,10 @@ export function LessonReader({ content }: LessonReaderProps) {
       })),
     [tocGroups]
   );
+
+  if (!contentReady) {
+    return <LessonReaderLoader />;
+  }
 
   return (
     <div className="lesson-reader">
