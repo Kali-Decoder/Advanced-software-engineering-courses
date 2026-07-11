@@ -1,11 +1,12 @@
 import {
-  COURSE,
+  getCourse,
   checkpointId,
   finalChecklistId,
 } from "@/lib/course";
-import type { Module, ProgressState } from "@/lib/types";
+import type { CourseId, Module, ProgressState } from "@/lib/types";
 
-export const STORAGE_KEY = "agentic-memory-course-progress-v2";
+export const STORAGE_KEY = "course-platform-progress-v1";
+export const LEGACY_STORAGE_KEY = "agentic-memory-course-progress-v2";
 
 export function getDefaultProgress(): ProgressState {
   return {
@@ -17,15 +18,19 @@ export function getDefaultProgress(): ProgressState {
   };
 }
 
-export function getTotalCheckpoints(): number {
-  const moduleCps = COURSE.modules.reduce(
+export function getTotalCheckpoints(courseId: CourseId): number {
+  const course = getCourse(courseId);
+  const moduleCps = course.modules.reduce(
     (sum, m) => sum + m.checkpoints.length,
     0
   );
-  return moduleCps + COURSE.completionChecklist.length;
+  return moduleCps + course.completionChecklist.length;
 }
 
-export function getCompletedCount(state: ProgressState): number {
+export function getCompletedCount(
+  courseId: CourseId,
+  state: ProgressState
+): number {
   const moduleDone = Object.values(state.checkpoints).filter(Boolean).length;
   const finalDone = Object.values(state.completionChecklist).filter(
     Boolean
@@ -33,10 +38,13 @@ export function getCompletedCount(state: ProgressState): number {
   return moduleDone + finalDone;
 }
 
-export function getOverallPercent(state: ProgressState): number {
-  const total = getTotalCheckpoints();
+export function getOverallPercent(
+  courseId: CourseId,
+  state: ProgressState
+): number {
+  const total = getTotalCheckpoints(courseId);
   if (!total) return 0;
-  return Math.round((getCompletedCount(state) / total) * 100);
+  return Math.round((getCompletedCount(courseId, state) / total) * 100);
 }
 
 export function getModuleProgress(
@@ -56,6 +64,7 @@ export function isModuleComplete(
   state: ProgressState
 ): boolean {
   if (state.modulesComplete[module.id]) return true;
+  if (!module.checkpoints.length) return false;
   return module.checkpoints.every((_, i) =>
     state.checkpoints[checkpointId(module.id, i)]
   );
@@ -77,14 +86,35 @@ export function markModuleComplete(
 }
 
 export function getLevelProgress(
+  courseId: CourseId,
   level: string,
   state: ProgressState
 ): number {
-  const modules = COURSE.modules.filter((m) => m.level === level);
+  const modules = getCourse(courseId).modules.filter((m) => m.level === level);
   if (!modules.length) return 0;
   const sum = modules.reduce(
     (acc, m) => acc + getModuleProgress(m, state),
     0
   );
   return Math.round(sum / modules.length);
+}
+
+export function getCompletedModuleCount(
+  courseId: CourseId,
+  state: ProgressState
+): number {
+  return getCourse(courseId).modules.filter((m) =>
+    isModuleComplete(m, state)
+  ).length;
+}
+
+export function getResumeModuleId(
+  courseId: CourseId,
+  state: ProgressState
+): number {
+  if (state.lastModule != null) return state.lastModule;
+  const next = getCourse(courseId).modules.find(
+    (m) => !isModuleComplete(m, state)
+  );
+  return next?.id ?? getCourse(courseId).modules[0]?.id ?? 0;
 }

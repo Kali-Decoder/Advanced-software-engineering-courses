@@ -1,10 +1,5 @@
-import { CourseShell } from "@/components/CourseShell";
-import { Dashboard } from "@/components/Dashboard";
+import { HomeCatalog } from "@/components/HomeCatalog";
 
 export default function HomePage() {
-  return (
-    <CourseShell>
-      <Dashboard />
-    </CourseShell>
-  );
+  return <HomeCatalog />;
 }

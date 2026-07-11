@@ -1,4 +1,11 @@
-export type SectionType = "intro" | "concept" | "hands-on" | "checkpoint";
+export type SectionType =
+  | "intro"
+  | "concept"
+  | "example"
+  | "diagram"
+  | "video"
+  | "hands-on"
+  | "checkpoint";
 
 export interface LessonSection {
   id: string;
@@ -18,8 +25,20 @@ function slugify(text: string, index: number) {
 
 function detectType(title: string): SectionType {
   const t = title.toLowerCase();
-  if (t.includes("hands-on") || t.includes("exercise")) return "hands-on";
-  if (t.includes("checkpoint")) return "checkpoint";
+  if (t.includes("simple explanation") || t.includes("overview")) return "intro";
+  if (t.includes("real-life example") || t.includes("real life example")) {
+    return "example";
+  }
+  if (t.startsWith("diagram")) return "diagram";
+  if (t.includes("video tutorial") || t.includes("🎥")) return "video";
+  if (
+    t.includes("hands-on") ||
+    t.includes("🛠️") ||
+    t.includes("exercise")
+  ) {
+    return "hands-on";
+  }
+  if (t.includes("key word") || t.includes("checkpoint")) return "checkpoint";
   return "concept";
 }
 
@@ -49,7 +68,7 @@ export function parseLessonSections(raw: string): LessonSection[] {
 
     sections.push({
       id: slugify(title, index),
-      title,
+      title: title.replace(/^🎥\s*|^🛠️\s*/u, "").trim(),
       content,
       type: detectType(title),
     });
@@ -61,4 +80,8 @@ export function parseLessonSections(raw: string): LessonSection[] {
 export function estimateReadingMinutes(content: string) {
   const words = content.split(/\s+/).filter(Boolean).length;
   return Math.max(1, Math.ceil(words / 200));
+}
+
+export function extractMermaidBlocks(content: string): string[] {
+  return [...content.matchAll(/```mermaid\n([\s\S]*?)```/g)].map((m) => m[1].trim());
 }

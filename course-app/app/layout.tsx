@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Crimson_Pro, Source_Sans_3 } from "next/font/google";
 import { ProgressProvider } from "@/context/ProgressContext";
-import { COURSE_META } from "@/lib/course";
 import "./globals.css";
 
 const crimson = Crimson_Pro({
@@ -17,8 +16,9 @@ const sourceSans = Source_Sans_3({
 });
 
 export const metadata: Metadata = {
-  title: `${COURSE_META.title} — Academic Course`,
-  description: COURSE_META.subtitle,
+  title: "Engineering Courses — Academic Course Platform",
+  description:
+    "Structured courses on AI agent memory systems and advanced backend & distributed systems engineering.",
 };
 
 export default function RootLayout({

@@ -1,0 +1,246 @@
+{
+  "completionChecklist": [
+    "Module 1: Traced a web request with curl and explained TCP vs UDP",
+    "Module 2: Observed CPU/memory with top/htop under load",
+    "Module 3: Practiced Linux debugging commands on a remote server",
+    "Module 4: Compared query performance with and without a database index",
+    "Module 5: Drew a URL shortener design and discussed CAP trade-offs",
+    "Module 6: Built retry, timeout, and backoff into an API client script",
+    "Module 7: Documented Kafka partition strategy and tested locally",
+    "Module 8: Implemented cache-aside with Redis and measured speedup",
+    "Module 9: Built and ran a multi-container Docker app",
+    "Module 10: Deployed to Kubernetes and watched auto-healing + HPA",
+    "Module 11: Launched EC2, uploaded to S3, and cleaned up resources",
+    "Module 12: Built a Prometheus + Grafana dashboard panel",
+    "Module 13: Built a REST API with JWT auth and rate limiting",
+    "Module 14: Moved secrets to env vars and practiced least-privilege IAM",
+    "Module 15: Sketched a monolith-to-microservices split for one feature",
+    "Module 16: Drew a consistent hashing ring and mapped keys to servers"
+  ],
+  "modules": [
+    {
+      "id": 1,
+      "title": "Networking — How Computers Talk to Each Other",
+      "level": "Foundation",
+      "diagram": "learning-path",
+      "description": "When you open a website, your computer (client) sends a message to another computer (server) somewhere else in the world, and gets a message back. Networking is the set of rules that make this possible — like a shared language both computers understand.",
+      "content": "### Simple explanation\nWhen you open a website, your computer (client) sends a message to another computer (server) somewhere else in the world, and gets a message back. Networking is the set of rules that make this possible — like a shared language both computers understand.\n\n### Real-life example\nThink of it like sending a letter. You write an address (like an IP address), put your letter in an envelope (like a data packet), and the postal system (the network) delivers it. If the letter is important (like a bank transfer), you want proof it arrived — that's TCP. If it's just casual news, you don't care if it's a bit late or lost — that's UDP (used in video calls, so a lost frame is not a big deal).\n\n### Diagram: how a web request travels\n```mermaid\nsequenceDiagram\n    participant You as Your Browser (Client)\n    participant DNS as DNS Server\n    participant LB as Load Balancer\n    participant Server as Web Server\n\n    You->>DNS: What is the IP for amazon.com?\n    DNS-->>You: Here is the IP address\n    You->>LB: Send request (HTTPS)\n    LB->>Server: Forward request to a healthy server\n    Server-->>LB: Send back response\n    LB-->>You: Deliver the response\n```\n\n### Key words in simple terms\n- **HTTP/HTTPS**: the language browsers and servers use to talk. HTTPS is the same, but locked with a secret code (encryption).\n- **TCP vs UDP**: TCP = reliable but a bit slower (used for websites, apps). UDP = fast but can lose data (used for video calls, gaming).\n- **Load Balancer**: a traffic cop that sends visitors to different servers, so no single server gets overloaded.\n- **DNS**: the phonebook of the internet — turns names like `google.com` into numbers (IP addresses) computers understand.\n\n### 🎥 Video tutorials\n- **TCP/IP Made Super Easy for Beginners** (short, very beginner-friendly): https://www.youtube.com/watch?v=LUxeuFz_GQo\n- **Zero to Hero: Networking Fundamentals Crash Course**: https://www.youtube.com/watch?v=ltBWJIhcjpA\n\n### 🛠️ Hands-on task\n1. Open your terminal and type: `curl -v https://example.com`\n2. Look at the output. You'll see the TLS handshake happening, and the actual HTTP request/response headers.\n3. Try `ping google.com` and notice the \"time=\" value — that's the latency (delay) we talked about.\n\n---",
+      "checkpoints": [
+        "Can explain Networking in my own words",
+        "Hands-on done: Open your terminal and type: `curl -v https://example.com`",
+        "Hands-on done: Look at the output. You'll see the TLS handshake happening, and the actual HTTP request/response hea",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Operating Systems — How Your Code Actually Runs",
+      "level": "Foundation",
+      "diagram": "learning-path",
+      "description": "Your app doesn't run \"by magic\" — it runs on a computer, and the Operating System (OS, like Linux or Windows) decides how much CPU time and memory your app gets, and shares the machine between many programs at once.",
+      "content": "### Simple explanation\nYour app doesn't run \"by magic\" — it runs on a computer, and the Operating System (OS, like Linux or Windows) decides how much CPU time and memory your app gets, and shares the machine between many programs at once.\n\n### Real-life example\nImagine a busy restaurant kitchen with one stove (the CPU) and many chefs (your processes) wanting to cook at the same time. The head chef (the OS scheduler) decides who gets stove time and for how long, quickly switching between dishes so everyone's food gets made, even though only one dish is actually cooking at any exact moment.\n\n### Diagram: process vs thread\n```mermaid\ngraph TD\n    A[Operating System] --> B[Process 1: Your API app]\n    A --> C[Process 2: Your Database]\n    B --> D[Thread 1: handles request A]\n    B --> E[Thread 2: handles request B]\n    C --> F[Thread 1: writes to disk]\n```\n\n### Key words in simple terms\n- **Process**: a running program with its own private memory.\n- **Thread**: a smaller worker inside a process; threads in the same process share memory.\n- **Deadlock**: two workers stuck waiting for each other forever, like two people trying to pass through a narrow door and both stepping back to let the other go first — forever.\n- **Memory Management**: how the OS gives out and takes back RAM. A \"memory leak\" is when your app keeps asking for memory and never gives it back, until the machine runs out.\n\n### 🎥 Video tutorial\n- **Operating Systems – Comprehensive Course for Beginners** (freeCodeCamp, 25 hours — you don't have to watch it all, just the sections you need): https://www.youtube.com/watch?v=yK1uBHPdp30\n\n### 🛠️ Hands-on task\n1. Run `top` (or `htop` if installed) on your machine while your app is running.\n2. Watch the CPU% and MEM% columns change as you send requests to your app.\n3. Try opening 100 terminal tabs (or a small script that spawns many processes) and see your machine slow down — that's context-switching overhead in action.\n\n---",
+      "checkpoints": [
+        "Can explain Operating Systems in my own words",
+        "Hands-on done: Run `top` (or `htop` if installed) on your machine while your app is running.",
+        "Hands-on done: Watch the CPU% and MEM% columns change as you send requests to your app.",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Linux — The Operating System Behind Almost Every Server",
+      "level": "Foundation",
+      "diagram": "learning-path",
+      "description": "Nearly every server in the world (AWS, Google Cloud, your company's backend) runs Linux. Learning basic Linux commands is like learning to drive — you need it to operate anything in production.",
+      "content": "### Simple explanation\nNearly every server in the world (AWS, Google Cloud, your company's backend) runs Linux. Learning basic Linux commands is like learning to drive — you need it to operate anything in production.\n\n### Real-life example\nWhen something breaks in production at 2 AM, you SSH (remotely log in) into the server and use Linux commands to find out what's wrong — checking logs, checking if the app is running, checking disk space.\n\n### Diagram: a typical debugging flow\n```mermaid\nflowchart LR\n    A[App is slow / down] --> B[SSH into the server]\n    B --> C[top / htop: check CPU & memory]\n    C --> D[journalctl: check logs]\n    D --> E[ss / netstat: check network connections]\n    E --> F[Fix the issue or restart service]\n```\n\n### Key words in simple terms\n- **Bash**: the command language you type into the terminal.\n- **SSH**: a secure way to remotely log into another computer.\n- **Cron**: a built-in scheduler — like an alarm clock for scripts (\"run this backup every night at 2 AM\").\n- **systemd**: keeps your service running — if it crashes, systemd can restart it automatically.\n\n### 🎥 Video tutorial\n- **Introduction to Linux – Full Course for Beginners** (freeCodeCamp, Linux Foundation): https://www.youtube.com/playlist?list=PLHbN2j-imEXa7fiBlASvpQRSpWclPg1DH\n\n### 🛠️ Hands-on task\n1. If you don't already have one, spin up a free-tier Linux server (AWS EC2 free tier, or just use a virtual machine).\n2. Practice these commands: `ls`, `cd`, `cat`, `top`, `ss -tulpn`, `journalctl -xe`.\n3. Write a small bash script that prints \"Hello World,\" then schedule it to run every minute using `cron` (`crontab -e`).\n\n---",
+      "checkpoints": [
+        "Can explain Linux in my own words",
+        "Hands-on done: If you don't already have one, spin up a free-tier Linux server (AWS EC2 free tier, or just use a vi",
+        "Hands-on done: Practice these commands: `ls`, `cd`, `cat`, `top`, `ss -tulpn`, `journalctl -xe`.",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Databases — Where Your Data Lives",
+      "level": "Foundation",
+      "diagram": "learning-path",
+      "description": "A database is where your app's data (users, orders, messages) is stored safely, so it's still there after your app restarts. Different databases are good at different things — some are great for structured data (SQL), some for flexible or huge-scale data (NoSQL).",
+      "content": "### Simple explanation\nA database is where your app's data (users, orders, messages) is stored safely, so it's still there after your app restarts. Different databases are good at different things — some are great for structured data (SQL), some for flexible or huge-scale data (NoSQL).\n\n### Real-life example\nThink of a SQL database (like Postgres) as a well-organized filing cabinet with labeled folders — great when your data has a clear structure (like customer records). Think of a NoSQL database (like MongoDB) as a big box where you can just throw in documents of different shapes — more flexible, but less strict.\n\n### Diagram: how an index speeds up search\n```mermaid\ngraph LR\n    subgraph \"Without an Index\"\n    A[Search for user by email] --> B[Scan ALL 1 million rows]\n    end\n    subgraph \"With an Index\"\n    C[Search for user by email] --> D[Look up in index — instant]\n    end\n```\n\n### Key words in simple terms\n- **Index**: a shortcut list that helps the database find data fast, like the index at the back of a book.\n- **Transaction**: a group of steps that must all succeed together, or none happen at all. *Example: moving money from Account A to Account B — you never want money to disappear if the app crashes mid-transfer.*\n- **Replication**: keeping copies of your data on other machines, so if one machine dies, you don't lose data.\n- **Sharding**: splitting a huge dataset across many machines, because one machine can't hold it all.\n\n### 🎥 Video tutorial\n- Search YouTube for **\"Learn Databases In-Depth – freeCodeCamp\"** (4-hour full course covering transactions, indexing, and storage engines).\n- Also great: search **\"Database Indexing Explained (with PostgreSQL) – Hussein Nasser\"** for a focused 15-minute video on indexing specifically.\n\n### 🛠️ Hands-on task\n1. Install Postgres locally (or use a free online sandbox like [db-fiddle.com](https://www.db-fiddle.com)).\n2. Create a table with 10,000 rows of fake data.\n3. Run `EXPLAIN ANALYZE SELECT * FROM your_table WHERE email = 'test@test.com';` — note the time.\n4. Add an index: `CREATE INDEX idx_email ON your_table(email);`\n5. Run the same query again — see the huge time difference.\n\n---",
+      "checkpoints": [
+        "Can explain Databases in my own words",
+        "Hands-on done: Install Postgres locally (or use a free online sandbox like [db-fiddle.com](https://www.db-fiddle.co",
+        "Hands-on done: Create a table with 10,000 rows of fake data.",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "System Design Basics — The Vocabulary of Big Systems",
+      "level": "Core",
+      "diagram": "production-systems",
+      "description": "This module teaches you the words engineers use when designing large systems — the kind of vocabulary you need in interviews and real architecture discussions.",
+      "content": "### Simple explanation\nThis module teaches you the words engineers use when designing large systems — the kind of vocabulary you need in interviews and real architecture discussions.\n\n### Real-life example\n**CAP Theorem** is the big one. Imagine WhatsApp has two servers in two different cities, and the network cable between the cities is cut (a \"partition\"). Now WhatsApp has to choose:\n- **Option A (Consistency)**: stop responding until the cities can talk again, so no messages are lost or out of order.\n- **Option B (Availability)**: keep working on both sides, even if the message history might briefly be slightly different in each city.\n\nMost real apps (like WhatsApp, Instagram) choose Option B — a little staleness is fine, but total downtime is not.\n\n### Diagram: the CAP theorem triangle\n```mermaid\ngraph TD\n    CAP[\"CAP Theorem: Pick 2 of 3<br/>when there's a network problem\"]\n    CAP --> C[Consistency<br/>Everyone sees the same data]\n    CAP --> A[Availability<br/>System always responds]\n    CAP --> P[Partition Tolerance<br/>Works even if network breaks]\n    C -.can't fully have both.-> A\n```\n\n### Key words in simple terms\n- **Horizontal scaling**: add more machines (like adding more cashiers at a store).\n- **Vertical scaling**: make one machine bigger and stronger (like giving one cashier superpowers).\n- **Stateless service**: a server that doesn't remember you between requests — any server can handle any request. Easy to scale.\n- **Eventual consistency**: data will be correct \"eventually,\" but maybe not the exact second you wrote it.\n\n### 🎥 Video tutorials\n- **Gaurav Sen's full System Design playlist** (start from video 1 and go in order): https://www.youtube.com/playlist?list=PLMCXHnjXnTnvo6alSjVkgxV-VH6EPyvoX\n- **CAP Theorem explained simply**: https://www.youtube.com/watch?v=prUs7I-TIMw\n\n### 🛠️ Hands-on task\n1. Draw (on paper or in a tool like Excalidraw) a simple design for \"a URL shortener\" (like bit.ly): one API server, one database, one cache.\n2. Label which parts would need to scale horizontally if traffic grew 100x.\n3. Ask yourself: \"If my database goes down for 1 minute, what happens to users?\" Write your answer down — that's you practicing system design thinking.\n\n---",
+      "checkpoints": [
+        "Can explain System Design Basics in my own words",
+        "Hands-on done: Draw (on paper or in a tool like Excalidraw) a simple design for \"a URL shortener\" (like bit.ly): on",
+        "Hands-on done: Label which parts would need to scale horizontally if traffic grew 100x.",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Distributed Systems Concepts — When You Have Many Machines",
+      "level": "Core",
+      "diagram": "production-systems",
+      "description": "Once your app runs on more than one machine, new problems appear: machines can crash, network calls can fail halfway, and two machines might disagree about the truth. This module is about handling those problems gracefully.",
+      "content": "### Simple explanation\nOnce your app runs on more than one machine, new problems appear: machines can crash, network calls can fail halfway, and two machines might disagree about the truth. This module is about handling those problems gracefully.\n\n### Real-life example\n**Circuit Breaker** — imagine you keep calling a friend who never picks up. After 5 failed calls, you stop calling for a while instead of wasting your time — you \"give the friend a break.\" Netflix does exactly this: if a service is failing repeatedly, they stop hammering it with more requests, which protects the whole system from crashing.\n\n### Diagram: retry + circuit breaker in action\n```mermaid\nflowchart TD\n    A[Service A calls Service B] --> B{Did it succeed?}\n    B -- Yes --> C[Continue normally]\n    B -- No --> D[Retry with backoff]\n    D --> E{Failed many times in a row?}\n    E -- Yes --> F[\"Open the circuit breaker<br/>(stop calling for a while)\"]\n    E -- No --> A\n    F --> G[After cooldown, try again]\n```\n\n### Diagram: leader-follower replication\n```mermaid\ngraph TD\n    Client[App writes data] --> Leader[Leader Database]\n    Leader -->|copies data| Follower1[Follower Database 1]\n    Leader -->|copies data| Follower2[Follower Database 2]\n    ReadClient[App reads data] --> Follower1\n    ReadClient2[App reads data] --> Follower2\n```\n\n### Key words in simple terms\n- **Idempotency**: doing something twice has the same effect as doing it once. *Example: Stripe payment API — if your app accidentally sends the same \"charge $10\" request twice due to a network glitch, idempotency keys make sure the customer is only charged once.*\n- **Consensus (Raft/Paxos)**: how multiple machines agree on one answer, even if some of them fail. Kubernetes uses this (via etcd) to keep track of what's running in your cluster.\n- **Saga pattern**: breaking one big multi-step transaction (like \"book flight + book hotel + charge card\") into smaller steps, with a plan to undo earlier steps if a later one fails.\n\n### 🎥 Video tutorials\n- **ByteByteGo YouTube channel** — search \"ByteByteGo circuit breaker\" or \"ByteByteGo consistent hashing\": https://www.youtube.com/@ByteByteGo\n- **Gaurav Sen — Raft/Consensus explained**: search \"Gaurav Sen Raft consensus\" on his channel (link above in Module 5).\n\n### 🛠️ Hands-on task\n1. Pick any API you use at work or in a side project.\n2. Write a tiny script that calls it, and add: a timeout (fail after 2 seconds), a retry (try 3 times), and a simple backoff (wait longer each time).\n3. Bonus: simulate a \"circuit breaker\" by tracking failures in a counter, and skip calling the API for 30 seconds after 5 failures in a row.\n\n---",
+      "checkpoints": [
+        "Can explain Distributed Systems Concepts in my own words",
+        "Hands-on done: Pick any API you use at work or in a side project.",
+        "Hands-on done: Write a tiny script that calls it, and add: a timeout (fail after 2 seconds), a retry (try 3 times),",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Messaging Systems",
+      "level": "Intermediate",
+      "diagram": "hybrid-retrieval",
+      "description": "Instead of Service A calling Service B directly (and waiting), Service A can drop a message into a queue, and Service B picks it up whenever it's ready. This decouples services — they don't need to be online at the same exact moment.",
+      "content": "*Since you already use Kafka, treat this module as \"level up,\" not \"start from zero.\"*\n\n### Simple explanation\nInstead of Service A calling Service B directly (and waiting), Service A can drop a message into a queue, and Service B picks it up whenever it's ready. This decouples services — they don't need to be online at the same exact moment.\n\n### Real-life example\nThink of Kafka like a post office with numbered mailboxes (**partitions**). A producer (like an \"OrderPlaced\" event from your checkout service) drops a letter into a mailbox. Multiple readers (**consumers** — billing, shipping, notifications) can each check their own copy of the mailbox and react independently, without the order service needing to know or care who's listening.\n\n### Diagram: Kafka producer/consumer flow\n```mermaid\ngraph LR\n    P[Producer: Order Service] -->|writes event| T[\"Kafka Topic: orders<br/>(split into partitions)\"]\n    T --> C1[Consumer: Billing Service]\n    T --> C2[Consumer: Shipping Service]\n    T --> C3[Consumer: Notification Service]\n```\n\n### Key words in simple terms\n- **Topic**: a named stream of events (like \"orders\" or \"payments\").\n- **Partition**: a topic is split into partitions so many consumers can read in parallel. Order is guaranteed *within* one partition, not across the whole topic.\n- **Consumer Group**: a team of consumers sharing the work of reading a topic.\n- **Offset**: a bookmark — how far a consumer has read, so it can resume after a restart.\n\n### 🎥 Video tutorials\n- **Confluent's official \"Apache Kafka 101\" course** (made by the creators of Kafka's parent company — the most authoritative source): search \"Confluent Apache Kafka 101\" or visit developer.confluent.io/courses/apache-kafka\n- **Apache Kafka Crash Course by Hussein Nasser**: search \"Hussein Nasser Kafka Crash Course\" on YouTube (short, practical, with a live coding demo).\n\n### 🛠️ Hands-on task (since you already use Kafka)\n1. Take a topic you already use at work. Write down: how many partitions does it have? What key do you use to decide which partition a message goes to?\n2. Deliberately think through: \"If I double the number of partitions, does my ordering guarantee break?\" (Hint: yes, if you're relying on a global order across the whole topic — this is a very common real production bug.)\n3. Try running Kafka locally with Docker (`docker run` a Kafka image), create a topic, and use the CLI to produce and consume a few test messages.\n\n---",
+      "checkpoints": [
+        "Can explain Messaging Systems in my own words",
+        "Hands-on done: Take a topic you already use at work. Write down: how many partitions does it have? What key do you ",
+        "Hands-on done: Deliberately think through: \"If I double the number of partitions, does my ordering guarantee break?",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Caching — Making Things Fast",
+      "level": "Intermediate",
+      "diagram": "hybrid-retrieval",
+      "description": "A cache is a small, fast storage layer that keeps a copy of data you've recently used, so next time you don't have to go all the way to the (slower) database.",
+      "content": "### Simple explanation\nA cache is a small, fast storage layer that keeps a copy of data you've recently used, so next time you don't have to go all the way to the (slower) database.\n\n### Real-life example\nImagine you're cooking and you keep the salt on the counter instead of walking to the pantry every time. That's a cache — quick access to something you use often. But if someone changes the recipe (the \"real\" data in the database) and you don't update your counter salt (the cache), you might use the wrong amount — that's a **cache invalidation** bug.\n\n### Diagram: cache-aside pattern\n```mermaid\nsequenceDiagram\n    participant App\n    participant Cache as Redis Cache\n    participant DB as Database\n\n    App->>Cache: Do you have this data?\n    alt Cache has it (cache hit)\n        Cache-->>App: Here it is (fast!)\n    else Cache doesn't have it (cache miss)\n        Cache-->>App: No, I don't have it\n        App->>DB: Give me the data\n        DB-->>App: Here it is\n        App->>Cache: Save it for next time\n    end\n```\n\n### Key words in simple terms\n- **TTL (Time To Live)**: how long a cached item stays valid before it expires automatically. *Example: cache a product price for 60 seconds — good enough freshness without extra complexity.*\n- **Cache-aside**: the app checks the cache first, and only asks the database if the cache doesn't have the answer (most common pattern).\n\n### 🎥 Video tutorial\n- Search YouTube for **\"Redis caching strategies explained\"** or **\"Hussein Nasser caching\"** for practical, backend-focused explanations.\n\n### 🛠️ Hands-on task\n1. Install Redis locally (or use a free Redis cloud sandbox).\n2. Write a tiny script: on each request, check Redis first; if missing, \"fetch\" from a fake slow database (add a 2-second `sleep`), then save the result into Redis with a 30-second TTL.\n3. Call it twice in a row and time both calls — see the speed difference on the second call.\n\n---",
+      "checkpoints": [
+        "Can explain Caching in my own words",
+        "Hands-on done: Install Redis locally (or use a free Redis cloud sandbox).",
+        "Hands-on done: Write a tiny script: on each request, check Redis first; if missing, \"fetch\" from a fake slow databa",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Containers (Docker) — Packaging Your App",
+      "level": "Intermediate",
+      "diagram": "setup",
+      "description": "Docker packs your app and everything it needs (code, libraries, settings) into one box called a **container**, so it runs the same way on your laptop, in testing, and in production.",
+      "content": "### Simple explanation\nDocker packs your app and everything it needs (code, libraries, settings) into one box called a **container**, so it runs the same way on your laptop, in testing, and in production.\n\n### Real-life example\nIt's like a meal-kit box. Instead of telling someone \"buy these 10 ingredients, chop them this way, cook at this temperature\" (which can go wrong in many ways), you just hand them a sealed box with everything already measured and ready — they just \"run\" it.\n\n### Diagram: Docker vs a Virtual Machine\n```mermaid\ngraph TD\n    subgraph \"Virtual Machines (heavier)\"\n    H1[Physical Server] --> HV[Hypervisor]\n    HV --> VM1[Full VM 1: own OS + App]\n    HV --> VM2[Full VM 2: own OS + App]\n    end\n    subgraph \"Docker Containers (lighter)\"\n    H2[Physical Server] --> OS[One shared OS Kernel]\n    OS --> C1[Container 1: App only]\n    OS --> C2[Container 2: App only]\n    end\n```\n\n### Key words in simple terms\n- **Image**: the blueprint/template for a container (built from a `Dockerfile`).\n- **Container**: a running instance of an image.\n- **Volume**: a way to save data outside the container, so it's not lost when the container restarts.\n\n### 🎥 Video tutorial\n- **Docker Tutorial for Beginners [FULL COURSE in 3 Hours]** by TechWorld with Nana: https://www.youtube.com/watch?v=3c-iBn73dDE\n\n### 🛠️ Hands-on task\n1. Install Docker Desktop.\n2. Write a simple `Dockerfile` for a small app (even a \"Hello World\" Node.js or Python app).\n3. Build it: `docker build -t my-first-app .`\n4. Run it: `docker run -p 3000:3000 my-first-app`\n5. Bonus: use `docker-compose` to run your app together with a Postgres or Redis container.\n\n---",
+      "checkpoints": [
+        "Can explain Containers in my own words",
+        "Hands-on done: Install Docker Desktop.",
+        "Hands-on done: Write a simple `Dockerfile` for a small app (even a \"Hello World\" Node.js or Python app).",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Kubernetes — Managing Many Containers",
+      "level": "Intermediate",
+      "diagram": "production-systems",
+      "description": "If Docker gives you one container, Kubernetes is the manager that runs hundreds of containers across many machines, restarts them if they crash, and spreads traffic between them — automatically.",
+      "content": "*You already have some Kubernetes experience — use this module to fill gaps, not to start over.*\n\n### Simple explanation\nIf Docker gives you one container, Kubernetes is the manager that runs hundreds of containers across many machines, restarts them if they crash, and spreads traffic between them — automatically.\n\n### Real-life example\nThink of Kubernetes as an airport's air traffic control system. It doesn't fly the planes (containers) itself, but it decides which runway (machine/node) each plane uses, reroutes flights if a runway closes, and adds more flights when there's more demand (auto-scaling).\n\n### Diagram: basic Kubernetes architecture\n```mermaid\ngraph TD\n    U[You: kubectl apply] --> CP[Control Plane]\n    CP --> N1[Node 1]\n    CP --> N2[Node 2]\n    N1 --> P1[Pod: App container]\n    N1 --> P2[Pod: App container]\n    N2 --> P3[Pod: App container]\n    SVC[Service — stable address] --> P1\n    SVC --> P2\n    SVC --> P3\n    Users[Users' traffic] --> ING[Ingress] --> SVC\n```\n\n### Key words in simple terms\n- **Pod**: the smallest unit — usually one container (sometimes a couple that work closely together).\n- **Deployment**: tells Kubernetes \"keep 5 copies of this app running at all times.\"\n- **Service**: a stable address that always points to healthy pods, even as pods get replaced.\n- **HPA (auto-scaler)**: automatically adds more pods when traffic increases, and removes them when it drops.\n\n### 🎥 Video tutorial\n- **Kubernetes Tutorial for Beginners [FULL COURSE in 4 Hours]** by TechWorld with Nana: https://www.youtube.com/watch?v=X48VuDVv0do\n\n### 🛠️ Hands-on task (deepen your existing knowledge)\n1. Install Minikube (a mini local Kubernetes) if you don't already run K8s locally.\n2. Deploy a simple app with a `Deployment` and a `Service`.\n3. Kill one of the pods manually (`kubectl delete pod <name>`) and watch Kubernetes automatically bring up a new one.\n4. Set up an HPA and load-test your app to watch it scale up pods in real time.\n\n---",
+      "checkpoints": [
+        "Can explain Kubernetes in my own words",
+        "Hands-on done: Install Minikube (a mini local Kubernetes) if you don't already run K8s locally.",
+        "Hands-on done: Deploy a simple app with a `Deployment` and a `Service`.",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Cloud (AWS) — Renting Computers the Smart Way",
+      "level": "Advanced",
+      "diagram": "production-patterns",
+      "description": "Instead of buying and maintaining physical servers, you \"rent\" computing power, storage, and services from AWS (or GCP/Azure), and pay only for what you use.",
+      "content": "### Simple explanation\nInstead of buying and maintaining physical servers, you \"rent\" computing power, storage, and services from AWS (or GCP/Azure), and pay only for what you use.\n\n### Real-life example\nIt's like renting a car instead of buying one. If you only drive occasionally, renting (cloud) is cheaper and easier than owning, maintaining, and parking a car (a physical server) all the time.\n\n### Diagram: a simple AWS web app setup\n```mermaid\ngraph TD\n    Users --> R53[Route53: DNS]\n    R53 --> ELB[Load Balancer]\n    ELB --> EC2a[EC2 instance 1]\n    ELB --> EC2b[EC2 instance 2]\n    EC2a --> RDS[(RDS: Managed Database)]\n    EC2b --> RDS\n    EC2a --> S3[(S3: File Storage)]\n```\n\n### Key words in simple terms\n- **EC2**: a virtual computer you rent by the hour/second.\n- **S3**: cloud storage for files (like a giant, reliable hard drive in the sky).\n- **RDS**: a managed database — AWS handles backups, patching, and maintenance for you.\n- **IAM**: the permission system — decides who/what is allowed to do what in your AWS account.\n\n### 🎥 Video tutorial\n- Search YouTube for **\"AWS Certified Cloud Practitioner freeCodeCamp full course\"** — a full, free walkthrough of EC2, S3, RDS, and IAM basics.\n- AWS's own free training: search **\"AWS Skill Builder free digital training\"**.\n\n### 🛠️ Hands-on task\n1. Sign up for AWS Free Tier (no cost for small usage).\n2. Launch a small EC2 instance and SSH into it.\n3. Create an S3 bucket and upload a file to it using the AWS CLI.\n4. **Important:** shut down/delete resources when done, so you don't get charged.\n\n---",
+      "checkpoints": [
+        "Can explain Cloud (AWS) in my own words",
+        "Hands-on done: Sign up for AWS Free Tier (no cost for small usage).",
+        "Hands-on done: Launch a small EC2 instance and SSH into it.",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Observability — Seeing What's Happening Inside Your System",
+      "level": "Advanced",
+      "diagram": "production-patterns",
+      "description": "When your app is spread across many services, you can't just \"look at it\" to know what's wrong. Observability tools let you see logs, numbers (metrics), and the path of a single request (tracing) across all your services.",
+      "content": "### Simple explanation\nWhen your app is spread across many services, you can't just \"look at it\" to know what's wrong. Observability tools let you see logs, numbers (metrics), and the path of a single request (tracing) across all your services.\n\n### Real-life example\nImagine ordering food through an app: order placed → restaurant confirms → rider picks up → delivered. If it's taking too long, you want to see exactly which step is slow — that's what **tracing** does for a backend request moving through many microservices.\n\n### Diagram: the three pillars of observability\n```mermaid\ngraph TD\n    O[Observability] --> L[\"Logs<br/>(what happened — text records)\"]\n    O --> M[\"Metrics<br/>(numbers over time — CPU, errors, latency)\"]\n    O --> T[\"Tracing<br/>(the path one request took across services)\"]\n```\n\n### Key words in simple terms\n- **Logs**: text messages your app writes when something happens (`\"User 123 logged in\"`).\n- **Metrics**: numbers tracked over time, shown on dashboards (like error rate per minute).\n- **Tracing**: follows one single request as it hops through multiple services, showing you exactly where time was spent.\n\n### 🎥 Video tutorial\n- Search YouTube for **\"Prometheus Grafana tutorial for beginners\"** — most cover setting up dashboards from scratch.\n- **TechWorld with Nana** has specific videos on Prometheus monitoring inside Kubernetes — search \"TechWorld with Nana Prometheus Kubernetes.\"\n\n### 🛠️ Hands-on task\n1. Run Prometheus and Grafana locally using Docker Compose (many ready-made templates exist online — search \"Prometheus Grafana docker-compose example\").\n2. Point Prometheus at a simple app that exposes a `/metrics` endpoint.\n3. Build one Grafana dashboard panel showing request count over time.\n\n---",
+      "checkpoints": [
+        "Can explain Observability in my own words",
+        "Hands-on done: Run Prometheus and Grafana locally using Docker Compose (many ready-made templates exist online — se",
+        "Hands-on done: Point Prometheus at a simple app that exposes a `/metrics` endpoint.",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 13,
+      "title": "API Design — How Services Talk to Clients",
+      "level": "Advanced",
+      "diagram": "mcp-integration",
+      "description": "An API is the \"menu\" your service offers to the outside world — what data can be requested, and how.",
+      "content": "### Simple explanation\nAn API is the \"menu\" your service offers to the outside world — what data can be requested, and how.\n\n### Real-life example\n**REST** is like a restaurant menu — fixed dishes (endpoints), you order what's on the menu. **GraphQL** is more like a buffet — you pick exactly the ingredients (fields) you want, nothing more, nothing less, in one trip. Facebook built GraphQL because their mobile app was making too many separate \"menu orders\" (REST calls) per screen.\n\n### Diagram: REST vs GraphQL\n```mermaid\ngraph LR\n    subgraph \"REST — multiple calls\"\n    A1[GET /user/1] --> R1[user info]\n    A2[GET /user/1/posts] --> R2[posts]\n    A3[GET /user/1/friends] --> R3[friends]\n    end\n    subgraph \"GraphQL — one call\"\n    B1[\"POST /graphql<br/>ask for exactly: name, posts, friends\"] --> R4[everything in one response]\n    end\n```\n\n### Key words in simple terms\n- **JWT**: a signed token that proves who you are, without the server needing to check a database every time.\n- **OAuth**: lets you log into an app using your Google/Facebook account, without giving that app your password.\n- **Rate limiting**: capping how many requests one user/client can make, to prevent abuse.\n\n### 🎥 Video tutorial\n- Search YouTube for **\"REST API design freeCodeCamp full course\"**.\n- **ByteByteGo** channel has short, visual videos comparing REST vs GraphQL vs gRPC and explaining JWT/OAuth flows: https://www.youtube.com/@ByteByteGo\n\n### 🛠️ Hands-on task\n1. Build a tiny REST API with 3 endpoints (`GET /users`, `GET /users/:id`, `POST /users`).\n2. Add a simple rate limiter (e.g., max 5 requests per minute per IP) using a library or a Redis counter.\n3. Add JWT-based login: issue a token on login, and require it on the other endpoints.\n\n---",
+      "checkpoints": [
+        "Can explain API Design in my own words",
+        "Hands-on done: Build a tiny REST API with 3 endpoints (`GET /users`, `GET /users/:id`, `POST /users`).",
+        "Hands-on done: Add a simple rate limiter (e.g., max 5 requests per minute per IP) using a library or a Redis counte",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 14,
+      "title": "Security — Protecting Your System",
+      "level": "Advanced",
+      "diagram": "production-patterns",
+      "description": "Security is about making sure only the right people/services can access your data, and that data can't be read or changed by attackers along the way.",
+      "content": "### Simple explanation\nSecurity is about making sure only the right people/services can access your data, and that data can't be read or changed by attackers along the way.\n\n### Real-life example\nTLS (HTTPS) is like sending a letter in a locked box that only the receiver has the key to — even if someone intercepts it in the mail, they can't read it. A leaked API key is like leaving your house key under the doormat — convenient, but anyone who finds it can walk right in. This is why real companies use secret managers (like AWS Secrets Manager) instead of hardcoding passwords in code.\n\n### Diagram: secrets management flow\n```mermaid\nflowchart LR\n    A[Your App starts up] --> B[Ask Secrets Manager for DB password]\n    B --> C{Is the app allowed?}\n    C -- Yes --> D[Give the password securely]\n    C -- No --> E[Deny access]\n    D --> F[App connects to Database]\n```\n\n### Key words in simple terms\n- **TLS**: encrypts data while it travels over the network.\n- **Encryption at rest**: encrypts data while it's stored on disk (e.g., encrypted S3 buckets).\n- **Least privilege**: give every person/service only the exact permissions they need, nothing more.\n\n### 🎥 Video tutorial\n- Search YouTube for **\"OWASP Top 10 explained\"** and **\"JWT security mistakes\"** for practical, real-world security lessons.\n\n### 🛠️ Hands-on task\n1. Look at any project you've built — search your code for hardcoded passwords or API keys.\n2. Move them into environment variables (a small first step toward proper secrets management).\n3. If you use AWS, try creating one IAM user with permission to access only ONE specific S3 bucket — practice least privilege.\n\n---",
+      "checkpoints": [
+        "Can explain Security in my own words",
+        "Hands-on done: Look at any project you've built — search your code for hardcoded passwords or API keys.",
+        "Hands-on done: Move them into environment variables (a small first step toward proper secrets management).",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Architecture Patterns — Common Ways to Structure Big Systems",
+      "level": "Capstone",
+      "diagram": "production-systems",
+      "description": "These are proven \"recipes\" engineers use again and again to structure large systems, instead of inventing a new approach every time.",
+      "content": "### Simple explanation\nThese are proven \"recipes\" engineers use again and again to structure large systems, instead of inventing a new approach every time.\n\n### Real-life example\n**Microservices** — Netflix doesn't have one giant program. It has hundreds of small, independent services (one for billing, one for recommendations, one for video streaming), each built and deployed by a different small team. If the recommendations service crashes, you can still watch a movie — that's the benefit of splitting things up.\n\n### Diagram: monolith vs microservices\n```mermaid\ngraph TD\n    subgraph \"Monolith — one big app\"\n    M[Single App: Users + Orders + Payments + Shipping]\n    end\n    subgraph \"Microservices — many small apps\"\n    S1[Users Service]\n    S2[Orders Service]\n    S3[Payments Service]\n    S4[Shipping Service]\n    S1 --- S2\n    S2 --- S3\n    S3 --- S4\n    end\n```\n\n### Key words in simple terms\n- **Event-driven architecture**: services react to events instead of calling each other directly (uses message queues like Kafka).\n- **API Gateway**: one \"front door\" that routes traffic to the right microservice — like a hotel receptionist directing guests to the right room.\n- **Outbox pattern**: makes sure that when you save something to the database AND publish an event about it, both things happen together reliably (a very common real-world bug source when done wrong).\n\n### 🎥 Video tutorial\n- **ByteByteGo** channel: search \"ByteByteGo microservices\" or \"ByteByteGo event-driven architecture\": https://www.youtube.com/@ByteByteGo\n- **CodeOpinion** channel: search \"CodeOpinion outbox pattern\" for a focused, practical explanation.\n\n### 🛠️ Hands-on task\n1. Take one feature from a monolith app you've worked on (or a sample project) and sketch how you'd split it into 2-3 microservices.\n2. Decide: which service owns which data? How would they talk to each other — direct API calls, or events through a queue?\n\n---",
+      "checkpoints": [
+        "Can explain Architecture Patterns in my own words",
+        "Hands-on done: Take one feature from a monolith app you've worked on (or a sample project) and sketch how you'd spl",
+        "Hands-on done: Decide: which service owns which data? How would they talk to each other — direct API calls, or even",
+        "Watched at least one video tutorial for this module"
+      ]
+    },
+    {
+      "id": 16,
+      "title": "Algorithms in Distributed Systems",
+      "level": "Capstone",
+      "diagram": "knowledge-graph",
+      "description": "These are clever tricks that make distributed systems fast and reliable, even with huge amounts of data spread across many machines.",
+      "content": "### Simple explanation\nThese are clever tricks that make distributed systems fast and reliable, even with huge amounts of data spread across many machines.\n\n### Real-life example\n**Consistent Hashing** solves a real problem: imagine you have 10 servers storing cached data, split by `hash(key) % 10`. If you add an 11th server, almost ALL your data suddenly maps to a different server — a disaster. Consistent hashing (used by Amazon's Dynamo, and later Cassandra and DynamoDB) fixes this so adding/removing one server only moves a small slice of data, not everything.\n\n### Diagram: consistent hashing ring\n```mermaid\ngraph TD\n    Ring[\"Hash Ring (0 to 360°)\"]\n    Ring --> N1[Server A at 30°]\n    Ring --> N2[Server B at 150°]\n    Ring --> N3[Server C at 270°]\n    K1[\"Key 'user123' hashes to 100°<br/>→ goes to next server clockwise: Server B\"]\n```\n\n### Key words in simple terms\n- **Bloom Filter**: a tiny, super-fast \"maybe yes / definitely no\" checker. *Example: Cassandra uses it to quickly check \"does this key possibly exist on disk?\" before doing an expensive disk read.*\n- **Gossip Protocol**: instead of one central manager, nodes randomly tell a few neighbors \"here's my status,\" and information spreads across the whole cluster over time — like rumors spreading in a school.\n- **Distributed Lock**: making sure only ONE server does a specific job at a time, even though many servers could try. *Example: making sure only one instance of a scheduled nightly job actually runs, even if you have 5 copies of your app deployed.*\n\n### 🎥 Video tutorial\n- **Gaurav Sen** channel: search \"Gaurav Sen consistent hashing\" and \"Gaurav Sen bloom filter\" for focused whiteboard explanations.\n\n### 🛠️ Hands-on task\n1. On paper, draw a hash ring with 4 servers.\n2. Manually place 5 sample keys on the ring and figure out which server each belongs to.\n3. Now remove one server — figure out which keys have to move. Notice it's only some keys, not all of them — that's the whole point of consistent hashing.\n\n---",
+      "checkpoints": [
+        "Can explain Algorithms in Distributed Systems in my own words",
+        "Hands-on done: On paper, draw a hash ring with 4 servers.",
+        "Hands-on done: Manually place 5 sample keys on the ring and figure out which server each belongs to.",
+        "Watched at least one video tutorial for this module"
+      ]
+    }
+  ]
+}

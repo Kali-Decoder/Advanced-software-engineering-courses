@@ -5,27 +5,49 @@ import { MarkdownContent } from "./MarkdownContent";
 
 const STYLES: Record<
   SectionType,
-  { border: string; bg: string; label: string }
+  { border: string; bg: string; label: string; icon?: string }
 > = {
   intro: {
     border: "border-neutral-200",
     bg: "bg-neutral-50",
     label: "Overview",
+    icon: "01",
   },
   concept: {
     border: "border-neutral-200",
     bg: "bg-white",
     label: "Concept",
+    icon: "02",
+  },
+  example: {
+    border: "border-blue-200",
+    bg: "bg-blue-50/40",
+    label: "Real Example",
+    icon: "★",
+  },
+  diagram: {
+    border: "border-neutral-950",
+    bg: "bg-gradient-to-br from-neutral-50 to-white",
+    label: "Architecture",
+    icon: "◈",
+  },
+  video: {
+    border: "border-red-200",
+    bg: "bg-gradient-to-br from-red-50/50 to-white",
+    label: "Video Tutorial",
+    icon: "▶",
   },
   "hands-on": {
     border: "border-neutral-950",
     bg: "bg-white",
     label: "Hands-on",
+    icon: "🛠",
   },
   checkpoint: {
     border: "border-neutral-300",
     bg: "bg-neutral-50",
-    label: "Reflect",
+    label: "Key Terms",
+    icon: "◉",
   },
 };
 
@@ -49,7 +71,7 @@ export function LessonSectionCard({
       id={section.id}
       className={`scroll-mt-28 overflow-hidden rounded-xl border transition-all duration-200 ${style.border} ${style.bg} ${
         open ? "shadow-sm" : "hover:border-neutral-950"
-      }`}
+      } ${section.type === "diagram" ? "ring-1 ring-neutral-950/5" : ""}`}
     >
       <button
         type="button"
@@ -57,11 +79,27 @@ export function LessonSectionCard({
         className="flex w-full items-start gap-4 px-5 py-4 text-left sm:px-6 sm:py-5"
         aria-expanded={open}
       >
-        <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded border border-neutral-200 bg-white text-[0.6rem] font-bold uppercase tracking-wider text-neutral-500">
-          {String(index + 1).padStart(2, "0")}
+        <span
+          className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded text-[0.6rem] font-bold uppercase tracking-wider ${
+            section.type === "diagram"
+              ? "border border-neutral-950 bg-neutral-950 text-white"
+              : section.type === "video"
+                ? "border border-red-200 bg-red-600 text-white"
+                : "border border-neutral-200 bg-white text-neutral-500"
+          }`}
+        >
+          {style.icon ?? String(index + 1).padStart(2, "0")}
         </span>
         <span className="min-w-0 flex-1">
-          <span className="mb-1 block text-[0.65rem] font-semibold uppercase tracking-widest text-neutral-400">
+          <span
+            className={`mb-1 block text-[0.65rem] font-semibold uppercase tracking-widest ${
+              section.type === "video"
+                ? "text-red-600"
+                : section.type === "diagram"
+                  ? "text-neutral-950"
+                  : "text-neutral-400"
+            }`}
+          >
             {style.label}
           </span>
           <span className="font-serif text-lg font-semibold leading-snug text-neutral-950 sm:text-xl">
@@ -91,8 +129,18 @@ export function LessonSectionCard({
         }`}
       >
         <div className="overflow-hidden">
-          <div className="border-t border-neutral-100 px-5 pb-6 pt-4 sm:px-6 sm:pb-8">
-            <MarkdownContent content={section.content} variant={section.type} />
+          <div
+            className={`border-t px-5 pb-6 pt-4 sm:px-6 sm:pb-8 ${
+              section.type === "diagram"
+                ? "border-neutral-200 bg-white/50"
+                : "border-neutral-100"
+            }`}
+          >
+            <MarkdownContent
+              content={section.content}
+              variant={section.type}
+              sectionTitle={section.title}
+            />
           </div>
         </div>
       </div>

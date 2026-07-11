@@ -1,13 +1,15 @@
 "use client";
 
-import { useProgressContext } from "@/context/ProgressContext";
+import { useCourseProgress } from "@/context/ProgressContext";
+import { useCourseContext } from "@/context/CourseContext";
 import { useSidebarCollapsed } from "@/hooks/useSidebarCollapsed";
 import { Header } from "./Header";
 import { MobileNav } from "./MobileNav";
 import { Sidebar } from "./Sidebar";
 
 export function CourseShell({ children }: { children: React.ReactNode }) {
-  const { reset } = useProgressContext();
+  const { courseId, meta } = useCourseContext();
+  const { reset } = useCourseProgress(courseId);
   const { collapsed, toggle, hydrated } = useSidebarCollapsed();
 
   return (
@@ -36,13 +38,17 @@ export function CourseShell({ children }: { children: React.ReactNode }) {
         </main>
       </div>
       <footer className="border-t border-neutral-200 bg-neutral-950 py-6 text-center text-sm text-neutral-400">
-        <p className="font-medium text-white">AI Agent Memory Systems</p>
+        <p className="font-medium text-white">{meta.title}</p>
         <p className="mt-2 text-xs">
           Progress saved locally ·{" "}
           <button
             type="button"
             onClick={() => {
-              if (confirm("Reset all course progress? This cannot be undone.")) {
+              if (
+                confirm(
+                  `Reset all progress for "${meta.title}"? This cannot be undone.`
+                )
+              ) {
                 reset();
                 window.location.reload();
               }

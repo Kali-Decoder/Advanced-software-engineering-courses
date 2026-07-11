@@ -3,9 +3,10 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { COURSE, finalChecklistId } from "@/lib/course";
+import { finalChecklistId } from "@/lib/course";
 import { getModuleProgress, isModuleComplete } from "@/lib/progress";
-import { useProgressContext } from "@/context/ProgressContext";
+import { useCourseContext } from "@/context/CourseContext";
+import { useCourseProgress } from "@/context/ProgressContext";
 import { AnimatedCheckbox } from "./AnimatedCheckbox";
 import { ProgressBar } from "./ProgressBar";
 import { SidebarToggle } from "./SidebarToggle";
@@ -17,23 +18,25 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const pathname = usePathname();
-  const { state, hydrated, persist } = useProgressContext();
+  const { courseId, course } = useCourseContext();
+  const { state, hydrated, persist } = useCourseProgress(courseId);
   const [query, setQuery] = useState("");
 
-  const activeId = pathname.startsWith("/modules/")
-    ? parseInt(pathname.split("/")[2], 10)
+  const modulePathPrefix = `/courses/${courseId}/modules/`;
+  const activeId = pathname.startsWith(modulePathPrefix)
+    ? parseInt(pathname.slice(modulePathPrefix.length), 10)
     : null;
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return COURSE.modules;
-    return COURSE.modules.filter(
+    if (!q) return course.modules;
+    return course.modules.filter(
       (m) =>
         m.title.toLowerCase().includes(q) ||
         m.level.toLowerCase().includes(q) ||
         String(m.id).includes(q)
     );
-  }, [query]);
+  }, [query, course.modules]);
 
   return (
     <aside className="flex h-full flex-col bg-neutral-50">
@@ -53,7 +56,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             Course modules
           </p>
           <p className="mt-0.5 truncate text-sm font-medium text-neutral-950">
-            {COURSE.modules.length} lessons
+            {course.modules.length} lessons
           </p>
         </div>
         <SidebarToggle collapsed={collapsed} onToggle={onToggle} />
@@ -105,7 +108,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             return (
               <li key={module.id}>
                 <Link
-                  href={`/modules/${module.id}`}
+                  href={`/courses/${courseId}/modules/${module.id}`}
                   title={collapsed ? `Module ${module.id}: ${module.title}` : undefined}
                   className={`sidebar-nav-link group mx-2 my-0.5 flex items-center rounded-lg text-sm transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
                     collapsed ? "justify-center px-2 py-2.5" : "gap-3 px-3 py-2.5"
@@ -161,7 +164,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               Final Checklist
             </h3>
             <ul className="max-h-40 space-y-2 overflow-y-auto">
-              {COURSE.completionChecklist.map((item, i) => {
+              {course.completionChecklist.map((item, i) => {
                 const id = finalChecklistId(i);
                 const checked = hydrated && state.completionChecklist[id];
                 return (

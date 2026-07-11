@@ -1,37 +1,44 @@
 "use client";
 
 import Link from "next/link";
-import { COURSE_META } from "@/lib/course";
 import {
   getCompletedCount,
   getOverallPercent,
   getTotalCheckpoints,
 } from "@/lib/progress";
-import { useProgressContext } from "@/context/ProgressContext";
+import { useCourseContext } from "@/context/CourseContext";
+import { useCourseProgress } from "@/context/ProgressContext";
 import { useAnimatedNumber } from "@/hooks/useAnimatedNumber";
 import { ProgressBar } from "./ProgressBar";
 import { ProgressRing } from "./ProgressRing";
 
 export function Header() {
-  const { state, hydrated } = useProgressContext();
-  const percent = hydrated ? getOverallPercent(state) : 0;
+  const { courseId, meta } = useCourseContext();
+  const { state, hydrated } = useCourseProgress(courseId);
+  const percent = hydrated ? getOverallPercent(courseId, state) : 0;
   const animatedPercent = useAnimatedNumber(percent);
-  const done = hydrated ? getCompletedCount(state) : 0;
-  const total = getTotalCheckpoints();
+  const done = hydrated ? getCompletedCount(courseId, state) : 0;
+  const total = getTotalCheckpoints(courseId);
 
   return (
     <header className="border-b border-neutral-800 bg-neutral-950 text-white">
       <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-6 px-6 py-6 lg:px-8">
         <div className="animate-fade-up">
-          <Link href="/" className="group block">
-            <span className="mb-3 inline-block text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-neutral-400 transition group-hover:text-white">
-              {COURSE_META.institution}
+          <Link
+            href="/"
+            className="mb-3 inline-block text-xs text-neutral-500 transition hover:text-neutral-300"
+          >
+            ← All courses
+          </Link>
+          <Link href={`/courses/${courseId}`} className="group block">
+            <span className="mb-1 inline-block text-[0.65rem] font-semibold uppercase tracking-[0.2em] text-neutral-400 transition group-hover:text-white">
+              {meta.institution}
             </span>
             <h1 className="font-serif text-2xl font-bold leading-tight tracking-tight md:text-3xl lg:text-4xl">
-              {COURSE_META.title}
+              {meta.title}
             </h1>
             <p className="mt-2 max-w-xl text-sm text-neutral-400 md:text-base">
-              {COURSE_META.subtitle}
+              {meta.subtitle}
             </p>
           </Link>
         </div>

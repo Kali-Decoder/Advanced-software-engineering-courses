@@ -204,3 +204,40 @@ body {
 .sidebar-top-label {
   will-change: opacity, max-width;
 }
+
+/* Architecture / Mermaid diagrams */
+.architecture-diagram-canvas svg {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  height: auto;
+}
+
+.architecture-diagram-canvas .node rect,
+.architecture-diagram-canvas .node polygon,
+.architecture-diagram-canvas .node circle {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.06));
+}
+
+.lesson-prose-diagram .architecture-diagram {
+  margin-top: 0;
+}
+
+/* YouTube video cards */
+.video-gallery .video-card + .video-card {
+  margin-top: 0;
+}
+
+.video-list > li + li {
+  margin-top: 0;
+}
+
+.lesson-prose-video .video-gallery + p {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px dashed #e5e5e5;
+  background: #fafafa;
+  font-size: 0.875rem;
+  color: #737373;
+}

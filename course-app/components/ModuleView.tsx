@@ -1,14 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { Module } from "@/lib/types";
-import { getModuleProgress, markModuleComplete } from "@/lib/progress";
-import { useProgressContext } from "@/context/ProgressContext";
+import {
+  getModuleProgress,
+  markModuleComplete,
+} from "@/lib/progress";
+import {
+  getNextModuleId,
+  getPrevModuleId,
+} from "@/lib/course";
+import { extractMermaidBlocks } from "@/lib/parse-lesson";
+import { useCourseContext } from "@/context/CourseContext";
+import { useCourseProgress } from "@/context/ProgressContext";
 import { CheckpointList } from "./CheckpointList";
 import { Diagram } from "./Diagram";
 import { LevelBadge } from "./LevelBadge";
 import { LessonReader } from "./LessonReader";
+import { MermaidDiagram } from "./MermaidDiagram";
 import { ProgressBar } from "./ProgressBar";
 import { ScrollProgress } from "./ScrollProgress";
 
@@ -21,7 +31,8 @@ const TABS: { id: Tab; label: string }[] = [
 ];
 
 export function ModuleView({ module }: { module: Module }) {
-  const { state, hydrated, persist } = useProgressContext();
+  const { courseId } = useCourseContext();
+  const { state, hydrated, persist } = useCourseProgress(courseId);
   const [activeTab, setActiveTab] = useState<Tab>("lesson");
   const [, setTick] = useState(0);
   const pct = hydrated ? getModuleProgress(module, state) : 0;
@@ -40,19 +51,27 @@ export function ModuleView({ module }: { module: Module }) {
     setTick((t) => t + 1);
   };
 
-  const prev = module.id > 0 ? module.id - 1 : null;
-  const next = module.id < 13 ? module.id + 1 : null;
+  const prev = getPrevModuleId(courseId, module.id);
+  const next = getNextModuleId(courseId, module.id);
+  const mermaidCharts = useMemo(
+    () => extractMermaidBlocks(module.content),
+    [module.content]
+  );
 
   return (
     <>
       <ScrollProgress />
       <div className="animate-fade-in min-w-0 max-w-full">
         <nav className="mb-6 flex items-center gap-2 text-sm text-neutral-400">
+          <Link href="/" className="transition hover:text-neutral-950">
+            All Courses
+          </Link>
+          <span>/</span>
           <Link
-            href="/"
+            href={`/courses/${courseId}`}
             className="transition hover:text-neutral-950"
           >
-            Home
+            Course Home
           </Link>
           <span>/</span>
           <span className="text-neutral-950">Module {module.id}</span>
@@ -115,10 +134,26 @@ export function ModuleView({ module }: { module: Module }) {
             aria-hidden={activeTab !== "diagram"}
           >
             <h3 className="mb-6 text-sm font-semibold uppercase tracking-wider text-neutral-400">
-              Concept Diagram
+              {mermaidCharts.length ? "Architecture Diagrams" : "Concept Diagram"}
             </h3>
-            <div className="w-full min-w-0 max-w-full overflow-hidden rounded-lg border border-neutral-100 bg-neutral-50 p-6">
-              <Diagram name={module.diagram} />
+            <div className="w-full min-w-0 max-w-full space-y-6 overflow-hidden">
+              {mermaidCharts.length > 0 ? (
+                mermaidCharts.map((chart, i) => (
+                  <MermaidDiagram
+                    key={i}
+                    chart={chart}
+                    title={
+                      mermaidCharts.length > 1
+                        ? `Diagram ${i + 1} of ${mermaidCharts.length}`
+                        : module.title
+                    }
+                  />
+                ))
+              ) : (
+                <div className="rounded-lg border border-neutral-100 bg-neutral-50 p-6">
+                  <Diagram name={module.diagram} />
+                </div>
+              )}
             </div>
           </article>
 
@@ -143,7 +178,7 @@ export function ModuleView({ module }: { module: Module }) {
         <nav className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-neutral-200 pt-8">
           {prev !== null ? (
             <Link
-              href={`/modules/${prev}`}
+              href={`/courses/${courseId}/modules/${prev}`}
               className="inline-flex items-center gap-2 rounded-lg border border-neutral-200 px-5 py-2.5 text-sm font-medium text-neutral-950 transition hover:border-neutral-950"
               onClick={() => goToModule(prev)}
             >
@@ -154,7 +189,7 @@ export function ModuleView({ module }: { module: Module }) {
           )}
           {next !== null ? (
             <Link
-              href={`/modules/${next}`}
+              href={`/courses/${courseId}/modules/${next}`}
               className="inline-flex items-center gap-2 rounded-lg bg-neutral-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800"
               onClick={() => completeCurrentAndGo(next)}
             >
@@ -162,7 +197,7 @@ export function ModuleView({ module }: { module: Module }) {
             </Link>
           ) : (
             <Link
-              href="/"
+              href={`/courses/${courseId}`}
               className="inline-flex items-center gap-2 rounded-lg border border-neutral-950 bg-neutral-950 px-5 py-2.5 text-sm font-medium text-white transition hover:bg-neutral-800"
               onClick={() => completeCurrentAndGo("home")}
             >

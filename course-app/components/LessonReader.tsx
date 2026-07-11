@@ -31,8 +31,14 @@ export function LessonReader({ content }: LessonReaderProps) {
   );
 
   useEffect(() => {
+    const defaultOpen = sections
+      .filter((s) =>
+        ["intro", "diagram", "video", "example"].includes(s.type)
+      )
+      .map((s) => s.id);
     const first = sections[0]?.id;
-    setOpenIds(new Set(first ? [first] : []));
+    const ids = defaultOpen.length ? defaultOpen : first ? [first] : [];
+    setOpenIds(new Set(ids));
     setActiveId(first ?? null);
   }, [sections]);
 

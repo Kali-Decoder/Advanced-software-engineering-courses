@@ -3,7 +3,8 @@
 import type { Module } from "@/lib/types";
 import { checkpointId } from "@/lib/course";
 import { markModuleComplete } from "@/lib/progress";
-import { useProgressContext } from "@/context/ProgressContext";
+import { useCourseContext } from "@/context/CourseContext";
+import { useCourseProgress } from "@/context/ProgressContext";
 import { AnimatedCheckbox } from "./AnimatedCheckbox";
 
 interface CheckpointListProps {
@@ -12,7 +13,8 @@ interface CheckpointListProps {
 }
 
 export function CheckpointList({ module, onUpdate }: CheckpointListProps) {
-  const { state, persist } = useProgressContext();
+  const { courseId } = useCourseContext();
+  const { state, persist } = useCourseProgress(courseId);
 
   const toggleCheckpoint = (index: number, checked: boolean) => {
     const id = checkpointId(module.id, index);
