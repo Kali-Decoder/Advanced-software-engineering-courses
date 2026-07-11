@@ -167,46 +167,46 @@ flowchart LR
     M15 --> M16[16 · Algorithms]
 ```
 
-| # | Module | Priority | Role in the system |
-|---|--------|----------|-------------------|
-| 0 | **Overview** | Start here | Map of all topics & connections |
-| 1 | **Networking** | ⭐⭐⭐⭐⭐ | How services communicate |
-| 2 | **Operating Systems** | ⭐⭐⭐⭐⭐ | How your code runs on hardware |
-| 3 | **Linux** | ⭐⭐⭐⭐☆ | How you operate production servers |
-| 4 | **Databases** | ⭐⭐⭐⭐⭐ | Where data lives |
-| 5 | **System Design Basics** | ⭐⭐⭐⭐⭐ | Vocabulary for scaling trade-offs |
-| 6 | **Distributed Systems** | ⭐⭐⭐⭐⭐ | Core of the subject |
-| 7 | **Messaging / Kafka** | ⭐⭐⭐⭐☆ | Async communication between services |
-| 8 | **Caching** | ⭐⭐⭐⭐☆ | Speed layer in front of databases |
-| 9 | **Containers** | ⭐⭐⭐⭐⭐ | Packaging apps consistently |
-| 10 | **Kubernetes** | ⭐⭐⭐⭐⭐ | Running containers at scale |
-| 11 | **Cloud (AWS)** | ⭐⭐⭐⭐☆ | Renting infrastructure |
-| 12 | **Observability** | ⭐⭐⭐⭐☆ | Seeing what your system is doing |
-| 13 | **API Design** | ⭐⭐⭐⭐☆ | How clients talk to your services |
-| 14 | **Security** | ⭐⭐⭐⭐☆ | Protecting data and access |
-| 15 | **Architecture Patterns** | ⭐⭐⭐⭐☆ | Proven ways to structure big systems |
-| 16 | **Algorithms** | ⭐⭐⭐⭐☆ | Clever tricks inside distributed systems |
+| # | Module | Role in the system |
+|---|--------|-------------------|
+| 0 | **Overview** | Map of all topics & connections — start here |
+| 1 | **Networking** | How services communicate |
+| 2 | **Operating Systems** | How your code runs on hardware |
+| 3 | **Linux** | How you operate production servers |
+| 4 | **Databases** | Where data lives |
+| 5 | **System Design Basics** | Vocabulary for scaling trade-offs |
+| 6 | **Distributed Systems** | Core of the subject |
+| 7 | **Messaging / Kafka** | Async communication between services |
+| 8 | **Caching** | Speed layer in front of databases |
+| 9 | **Containers** | Packaging apps consistently |
+| 10 | **Kubernetes** | Running containers at scale |
+| 11 | **Cloud (AWS)** | Renting infrastructure |
+| 12 | **Observability** | Seeing what your system is doing |
+| 13 | **API Design** | How clients talk to your services |
+| 14 | **Security** | Protecting data and access |
+| 15 | **Architecture Patterns** | Proven ways to structure big systems |
+| 16 | **Algorithms** | Clever tricks inside distributed systems |
 
 ---
 
 ### Part 3 — Topic Map: Foundations (Modules 1–4)
 
-#### 1. Networking ⭐⭐⭐⭐⭐
+#### 1. Networking
 Distributed systems communicate over networks — the most important foundation.
 
 **Learn:** OSI model · TCP vs UDP · HTTP/HTTPS · HTTP/2 & HTTP/3 · REST APIs · WebSockets · gRPC · DNS · Load balancing · Reverse proxies · SSL/TLS · Latency & bandwidth
 
-#### 2. Operating Systems ⭐⭐⭐⭐⭐
+#### 2. Operating Systems
 Understand how applications run.
 
 **Topics:** Processes vs threads · Context switching · Memory management · Virtual memory · Locks · Mutex · Semaphores · Scheduling · Deadlocks · File systems
 
-#### 3. Linux ⭐⭐⭐⭐☆
+#### 3. Linux
 Most distributed systems run on Linux.
 
 **Learn:** Bash · SSH · Cron · Systemd · Networking commands · `top` · `htop` · `netstat` · `ss` · `lsof` · `iptables` · `journalctl`
 
-#### 4. Databases ⭐⭐⭐⭐⭐
+#### 4. Databases
 Understand storage.
 
 **SQL:** PostgreSQL · MySQL
@@ -219,10 +219,10 @@ Understand storage.
 
 ### Part 4 — Topic Map: Core Systems (Modules 5–8)
 
-#### 5. System Design Basics ⭐⭐⭐⭐⭐
+#### 5. System Design Basics
 **Core topics:** Horizontal scaling · Vertical scaling · Stateless vs stateful services · CAP theorem · Consistency · Availability · Partition tolerance · Eventual vs strong consistency · Replication · Leader election · Quorum · Consensus basics
 
-#### 6. Distributed System Concepts ⭐⭐⭐⭐⭐
+#### 6. Distributed System Concepts
 The heart of the subject.
 
 **Communication:** RPC · gRPC · Message queues
@@ -241,32 +241,32 @@ The heart of the subject.
 
 **Transactions:** Two-phase commit · Saga pattern
 
-#### 7. Messaging Systems ⭐⭐⭐⭐☆
+#### 7. Messaging Systems
 **Tools:** Kafka · RabbitMQ · ActiveMQ · NATS
 
 **Topics:** Producer · Consumer · Partition · Offset · Consumer groups · Ordering · At-least-once · At-most-once · Exactly-once (practical)
 
 *Go deeper here if you already use Kafka.*
 
-#### 8. Caching ⭐⭐⭐⭐☆
+#### 8. Caching
 **Learn:** Redis · Cache-aside · Write-through · Write-back · Cache invalidation · TTL
 
 ---
 
 ### Part 5 — Topic Map: Infrastructure (Modules 9–12)
 
-#### 9. Containers ⭐⭐⭐⭐⭐
+#### 9. Containers
 Docker · Images · Layers · Registry · Volumes · Networks
 
-#### 10. Kubernetes ⭐⭐⭐⭐⭐
+#### 10. Kubernetes
 Pods · Deployments · Services · StatefulSets · ConfigMaps · Secrets · Ingress · HPA · Service discovery
 
 *Deepen this if you already have K8s experience.*
 
-#### 11. Cloud (AWS) ⭐⭐⭐⭐☆
+#### 11. Cloud (AWS)
 EC2 · VPC · IAM · S3 · RDS · DynamoDB · EKS · ECS · ELB · Auto Scaling · CloudWatch · Route53
 
-#### 12. Observability ⭐⭐⭐⭐☆
+#### 12. Observability
 **Logging:** ELK · Loki
 
 **Metrics:** Prometheus · Grafana
@@ -277,16 +277,16 @@ EC2 · VPC · IAM · S3 · RDS · DynamoDB · EKS · ECS · ELB · Auto Scaling 
 
 ### Part 6 — Topic Map: Production & Patterns (Modules 13–16)
 
-#### 13. API Design ⭐⭐⭐⭐☆
+#### 13. API Design
 REST · GraphQL · gRPC · Authentication · JWT · OAuth · Rate limiting
 
-#### 14. Security ⭐⭐⭐⭐☆
+#### 14. Security
 TLS · Certificates · OAuth · JWT · Secrets management · Encryption · IAM
 
-#### 15. Architecture Patterns ⭐⭐⭐⭐☆
+#### 15. Architecture Patterns
 Microservices · Event-driven architecture · CQRS · Event sourcing · Saga · Outbox pattern · Service mesh · API Gateway
 
-#### 16. Algorithms in Distributed Systems ⭐⭐⭐⭐☆
+#### 16. Algorithms in Distributed Systems
 Consistent hashing · Bloom filters · Merkle trees · Gossip protocol · Leader election · Distributed locks
 
 ---
