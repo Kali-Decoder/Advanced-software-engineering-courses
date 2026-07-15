@@ -1,0 +1,317 @@
+{
+  "suggestedPath": [2, 3, 7, 8, 9, 12],
+  "tiers": [
+    {
+      "id": 1,
+      "label": "Foundations",
+      "description": "Core distributed building blocks every backend engineer needs."
+    },
+    {
+      "id": 2,
+      "label": "Coordination & Shared State",
+      "description": "Keeping many nodes in sync without a single point of failure."
+    },
+    {
+      "id": 3,
+      "label": "Advanced Architectures",
+      "description": "Production patterns behind checkout, Kafka, Stripe, and Dynamo."
+    },
+    {
+      "id": 4,
+      "label": "Capstone",
+      "description": "Multi-region and orchestration systems at production grade."
+    }
+  ],
+  "projects": [
+    {
+      "id": 1,
+      "title": "URL Shortener",
+      "inspiredBy": "bit.ly",
+      "description": "Convert long URLs into short codes and redirect users back. Multiple API servers must generate unique short codes without colliding, and reads must stay fast under heavy traffic.",
+      "tier": 1,
+      "technologies": [
+        "Node.js / Go / Java",
+        "PostgreSQL",
+        "Redis",
+        "Snowflake / Base62 IDs",
+        "Nginx / HAProxy"
+      ],
+      "keyLearnings": [
+        "Distributed unique ID generation without a single point of failure",
+        "Cache-aside pattern (check cache → fallback to DB → populate cache)",
+        "Stateless service design so any server can handle any request",
+        "Read-heavy vs write-heavy system design tradeoffs"
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Rate Limiter as a Service",
+      "inspiredBy": "Stripe / GitHub API throttling",
+      "description": "A shared rate-limiting layer that enforces request limits consistently across many stateless API servers, so a user can't bypass limits by hitting different servers.",
+      "tier": 1,
+      "technologies": [
+        "Redis",
+        "Lua scripting",
+        "Token Bucket",
+        "Sliding Window",
+        "Kong / Nginx"
+      ],
+      "keyLearnings": [
+        "Why local in-memory rate limiting fails in distributed setups",
+        "Atomicity and race conditions in shared counters",
+        "Token bucket vs sliding window tradeoffs",
+        "Designing for low-latency shared state checks on every request"
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Job Scheduler / Background Workers",
+      "inspiredBy": "Celery / Sidekiq",
+      "description": "An API instantly accepts a task and hands it to background workers that scale independently and recover from crashes without losing or duplicating work.",
+      "tier": 1,
+      "technologies": [
+        "RabbitMQ / Redis Streams / SQS",
+        "Celery / Go workers",
+        "Dead Letter Queue",
+        "Idempotency keys"
+      ],
+      "keyLearnings": [
+        "At-least-once vs exactly-once delivery guarantees",
+        "Idempotency: making retried operations safe",
+        "Backpressure when workers can't keep up",
+        "Retry strategies and dead-letter handling"
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Distributed Cache with Invalidation",
+      "inspiredBy": "Memcached front",
+      "description": "Multiple app servers keep a local/shared cache. When the database changes, all caches must be invalidated or updated together — otherwise servers serve stale data.",
+      "tier": 2,
+      "technologies": [
+        "Redis / Memcached",
+        "Redis Pub/Sub / Kafka",
+        "Write-through / write-behind"
+      ],
+      "keyLearnings": [
+        "Cache coherence across multiple nodes",
+        "Write-through vs write-behind vs cache-aside",
+        "Why cache invalidation is one of the hard problems in CS",
+        "Trade-offs between staleness and consistency"
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Real-Time Chat / Notifications",
+      "inspiredBy": "Slack backbone",
+      "description": "Users connect via WebSocket to different gateway servers. A message from Server A must reach a recipient on Server B, with presence tracking for who's online.",
+      "tier": 2,
+      "technologies": [
+        "WebSockets / Socket.IO",
+        "Redis Pub/Sub / Kafka",
+        "Redis presence + TTL",
+        "Sticky sessions"
+      ],
+      "keyLearnings": [
+        "Managing stateful connections at scale",
+        "Fan-out messaging patterns",
+        "Presence and heartbeat systems",
+        "Horizontal scaling of long-lived connections"
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Distributed File Storage",
+      "inspiredBy": "S3 / GFS",
+      "description": "Store large files reliably by splitting them into chunks, replicating each across storage nodes, and tracking locations in a metadata service so files survive node failure.",
+      "tier": 2,
+      "technologies": [
+        "Postgres / etcd metadata",
+        "File storage nodes",
+        "Replication factor 3",
+        "gRPC",
+        "Checksums"
+      ],
+      "keyLearnings": [
+        "Separation of metadata and data planes",
+        "Chunking large files for parallel read/write",
+        "Replication strategies and failure recovery",
+        "Data integrity via checksums"
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Leader Election + Service Discovery",
+      "inspiredBy": "etcd / Consul",
+      "description": "In a cluster of identical workers, exactly one acts as leader at any time. Other nodes detect failure and elect a new leader automatically.",
+      "tier": 2,
+      "technologies": [
+        "etcd / ZooKeeper",
+        "Leases & heartbeats",
+        "Bully / Raft-lite",
+        "gRPC / TCP"
+      ],
+      "keyLearnings": [
+        "Leases and heartbeats for failure detection",
+        "Split-brain avoidance",
+        "Consensus tools vs building your own",
+        "Failover timing tradeoffs"
+      ]
+    },
+    {
+      "id": 8,
+      "title": "E-Commerce Order System (Saga)",
+      "inspiredBy": "Amazon checkout",
+      "description": "Checkout spans Inventory, Payment, and Shipping. If Payment fails after stock is reserved, the system rolls back with compensating actions instead of a single distributed transaction.",
+      "tier": 3,
+      "technologies": [
+        "Microservices",
+        "Kafka / RabbitMQ",
+        "Saga orchestration / choreography",
+        "Database per service"
+      ],
+      "keyLearnings": [
+        "Why 2PC doesn't scale well in microservices",
+        "Saga pattern: orchestration vs choreography",
+        "Compensating transactions",
+        "Eventual consistency in business workflows"
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Mini Kafka",
+      "inspiredBy": "Apache Kafka",
+      "description": "An append-only log split into partitions, each replicated across brokers with a leader/follower model, plus consumer groups that track their own read offsets.",
+      "tier": 3,
+      "technologies": [
+        "Go / Rust",
+        "Segment + index files",
+        "gRPC / TCP replication",
+        "Consumer group offsets"
+      ],
+      "keyLearnings": [
+        "Log-structured storage design",
+        "Leader/follower replication per partition",
+        "Partitioning and ordering guarantees",
+        "Consumer group semantics and offset management"
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Distributed Payment Processor",
+      "inspiredBy": "Stripe dedup layer",
+      "description": "A payment API that never double-charges even when clients retry after timeouts, and reliably publishes downstream events exactly once in practice.",
+      "tier": 3,
+      "technologies": [
+        "Idempotency-key store",
+        "Outbox pattern",
+        "Kafka / RabbitMQ",
+        "Redis Redlock / DB locks"
+      ],
+      "keyLearnings": [
+        "Idempotency at the database layer",
+        "Outbox pattern for reliable event publishing",
+        "Exactly-once as at-least-once + deduplication",
+        "Handling concurrent retries safely"
+      ]
+    },
+    {
+      "id": 11,
+      "title": "Mini DynamoDB / Cassandra",
+      "inspiredBy": "Amazon Dynamo",
+      "description": "A key-value store that shards with consistent hashing, replicates keys, and uses quorum reads/writes plus conflict resolution to stay available during failures.",
+      "tier": 3,
+      "technologies": [
+        "Consistent hashing",
+        "Quorum (W + R > N)",
+        "Vector clocks / LWW",
+        "Gossip protocol",
+        "Go / Rust"
+      ],
+      "keyLearnings": [
+        "Consistent hashing and data movement on scale",
+        "Quorum-based consistency (CAP in practice)",
+        "Conflict resolution for concurrent writes",
+        "Gossip for decentralized membership"
+      ]
+    },
+    {
+      "id": 12,
+      "title": "Raft Consensus",
+      "inspiredBy": "etcd / CockroachDB / TiKV",
+      "description": "From-scratch Raft: leader election, log replication, and safety guarantees so a cluster agrees on one source of truth through crashes and partitions.",
+      "tier": 3,
+      "technologies": [
+        "Go / Rust",
+        "gRPC / TCP RPCs",
+        "Persistent log",
+        "Chaos testing"
+      ],
+      "keyLearnings": [
+        "Leader election with randomized timeouts",
+        "Log replication and commit index tracking",
+        "Safety guarantees for committed entries",
+        "Snapshotting for log compaction"
+      ]
+    },
+    {
+      "id": 13,
+      "title": "Multi-Region Active-Active",
+      "inspiredBy": "DynamoDB Global Tables",
+      "description": "Simulate geographic regions with async replication. Clients choose strong consistency (cross-region quorum) or eventual consistency (fast local reads).",
+      "tier": 4,
+      "technologies": [
+        "Docker Compose regions",
+        "Toxiproxy / tc latency",
+        "Async replication",
+        "CRDTs / LWW",
+        "Consistency-level SDK"
+      ],
+      "keyLearnings": [
+        "CAP tradeoffs hands-on",
+        "Multi-region replication lag consequences",
+        "APIs that expose consistency as a knob",
+        "Chaos testing under partitions"
+      ]
+    },
+    {
+      "id": 14,
+      "title": "Mini Container Orchestrator",
+      "inspiredBy": "Kubernetes",
+      "description": "A control plane that tracks worker nodes, schedules containers by resource availability, detects failure, and reschedules workloads — the core K8s reconciliation loop.",
+      "tier": 4,
+      "technologies": [
+        "Go control plane",
+        "Docker SDK / containerd",
+        "Node agents",
+        "Bin-packing scheduler",
+        "Reconciliation loop"
+      ],
+      "keyLearnings": [
+        "The reconciliation loop pattern",
+        "Scheduling under resource constraints",
+        "Failure detection and rescheduling",
+        "Rolling updates without downtime"
+      ]
+    },
+    {
+      "id": 15,
+      "title": "Distributed Lock Manager",
+      "inspiredBy": "Chubby / ZooKeeper",
+      "description": "Distributed locks with lease expiration and fencing tokens — fixing the classic bug where a paused client still thinks it holds a lock and corrupts data.",
+      "tier": 4,
+      "technologies": [
+        "etcd / ZooKeeper",
+        "Fencing tokens",
+        "Lease server",
+        "Session cleanup"
+      ],
+      "keyLearnings": [
+        "Why network mutexes fail (partial failures, GC pauses)",
+        "Fencing tokens for the zombie-client problem",
+        "Lease expiration and session management",
+        "Safety vs liveness in distributed locking"
+      ]
+    }
+  ]
+}

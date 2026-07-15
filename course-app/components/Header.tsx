@@ -8,10 +8,16 @@ import {
   getTotalCheckpoints,
 } from "@/lib/progress";
 import { getBlogResources, hasBlogResources } from "@/lib/blog-resources";
+import {
+  getProjectCatalog,
+  getProjectProgressSummary,
+  hasProjects,
+} from "@/lib/projects";
 import { useCourseContext } from "@/context/CourseContext";
 import { useCourseProgress } from "@/context/ProgressContext";
 import { useAnimatedNumber } from "@/hooks/useAnimatedNumber";
 import { BlogResourcesModal } from "./BlogResourcesModal";
+import { ProjectsModal } from "./ProjectsModal";
 import { Skeleton } from "./loading/Skeleton";
 import { ProgressBar } from "./ProgressBar";
 import { ProgressRing } from "./ProgressRing";
@@ -20,12 +26,16 @@ export function Header() {
   const { courseId, meta } = useCourseContext();
   const { state, hydrated } = useCourseProgress(courseId);
   const [blogOpen, setBlogOpen] = useState(false);
+  const [projectsOpen, setProjectsOpen] = useState(false);
   const percent = hydrated ? getOverallPercent(courseId, state) : 0;
   const animatedPercent = useAnimatedNumber(percent);
   const done = hydrated ? getCompletedCount(courseId, state) : 0;
   const total = getTotalCheckpoints(courseId);
   const blogResources = getBlogResources(courseId);
   const showBlogResources = hasBlogResources(courseId);
+  const projectCatalog = getProjectCatalog(courseId);
+  const showProjects = hasProjects(courseId);
+  const projectSummary = getProjectProgressSummary(courseId, state);
 
   return (
     <>
@@ -49,18 +59,37 @@ export function Header() {
                 {meta.subtitle}
               </p>
             </Link>
-            {showBlogResources && (
-              <button
-                type="button"
-                onClick={() => setBlogOpen(true)}
-                className="mt-4 inline-flex items-center gap-2 rounded-lg border border-neutral-700 bg-neutral-900 px-3.5 py-2 text-sm font-medium text-white transition hover:border-neutral-500 hover:bg-neutral-800"
-              >
-                <BookIcon />
-                Blog Resources
-                <span className="rounded-full bg-neutral-800 px-2 py-0.5 text-xs text-neutral-300">
-                  {blogResources.length}
-                </span>
-              </button>
+            {(showProjects || showBlogResources) && (
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                {showProjects && projectCatalog && (
+                  <button
+                    type="button"
+                    onClick={() => setProjectsOpen(true)}
+                    className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 bg-neutral-900 px-3.5 py-2 text-sm font-medium text-white transition hover:border-neutral-500 hover:bg-neutral-800"
+                  >
+                    <ProjectsIcon />
+                    Projects
+                    <span className="rounded-full bg-neutral-800 px-2 py-0.5 text-xs text-neutral-300">
+                      {hydrated
+                        ? `${projectSummary.completed}/${projectSummary.total}`
+                        : projectSummary.total}
+                    </span>
+                  </button>
+                )}
+                {showBlogResources && (
+                  <button
+                    type="button"
+                    onClick={() => setBlogOpen(true)}
+                    className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 bg-neutral-900 px-3.5 py-2 text-sm font-medium text-white transition hover:border-neutral-500 hover:bg-neutral-800"
+                  >
+                    <BookIcon />
+                    Blog Resources
+                    <span className="rounded-full bg-neutral-800 px-2 py-0.5 text-xs text-neutral-300">
+                      {blogResources.length}
+                    </span>
+                  </button>
+                )}
+              </div>
             )}
           </div>
 
@@ -94,6 +123,14 @@ export function Header() {
         </div>
       </header>
 
+      {showProjects && projectCatalog && (
+        <ProjectsModal
+          open={projectsOpen}
+          onClose={() => setProjectsOpen(false)}
+          catalog={projectCatalog}
+        />
+      )}
+
       {showBlogResources && (
         <BlogResourcesModal
           open={blogOpen}
@@ -102,6 +139,25 @@ export function Header() {
         />
       )}
     </>
+  );
+}
+
+function ProjectsIcon() {
+  return (
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M2.5 4.5h4v4h-4v-4ZM9.5 4.5h4v4h-4v-4ZM2.5 11.5h4v2h-4v-2ZM9.5 11.5h4v2h-4v-2Z"
+        stroke="currentColor"
+        strokeWidth="1.25"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
 

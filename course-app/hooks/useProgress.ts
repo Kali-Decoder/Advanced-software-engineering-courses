@@ -50,7 +50,13 @@ export function useProgress() {
 
   const getCourseProgress = useCallback(
     (courseId: CourseId): ProgressState => {
-      return allProgress.courses[courseId] ?? getDefaultProgress();
+      const saved = allProgress.courses[courseId];
+      if (!saved) return getDefaultProgress();
+      return {
+        ...getDefaultProgress(),
+        ...saved,
+        projects: saved.projects ?? {},
+      };
     },
     [allProgress]
   );

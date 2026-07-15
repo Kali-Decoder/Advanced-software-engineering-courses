@@ -35,10 +35,13 @@ export interface CourseMeta {
   accent: "neutral" | "blue";
 }
 
+export type ProjectStatus = "not_started" | "in_progress" | "completed";
+
 export interface ProgressState {
   checkpoints: Record<string, boolean>;
   modulesComplete: Record<number, boolean>;
   completionChecklist: Record<string, boolean>;
+  projects: Record<number, ProjectStatus>;
   lastModule: number | null;
   lastUpdated: string | null;
 }

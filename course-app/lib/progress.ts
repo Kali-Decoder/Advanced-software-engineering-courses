@@ -13,6 +13,7 @@ export function getDefaultProgress(): ProgressState {
     checkpoints: {},
     modulesComplete: {},
     completionChecklist: {},
+    projects: {},
     lastModule: null,
     lastUpdated: null,
   };
