@@ -12,6 +12,8 @@ Client → Nginx (LB) → API (any instance)
                Redis (cache for redirects)
 ```
 
+![alt text](url-shortner.jpg)
+
 ## Stack
 
 | Piece | Role |
@@ -57,7 +59,7 @@ Open the UI: [http://localhost:8081](http://localhost:8081)
 
 ```bash
 cd projects/basics/url-shortner
-docker compose up --build
+docker compose up -d
 ```
 
 ### Try it
@@ -83,7 +85,7 @@ curl -s http://localhost:8081/health
 1. Start only Postgres + Redis:
 
 ```bash
-docker compose up postgres redis
+docker compose up -d postgres redis
 ```
 
 2. Install and run the API:
