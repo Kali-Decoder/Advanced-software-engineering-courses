@@ -1,0 +1,21 @@
+{
+  "name": "url-shortner",
+  "version": "1.0.0",
+  "description": "Distributed URL shortener — Node.js, Postgres, Redis, Snowflake IDs",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "migrate": "node src/db/migrate.js",
+    "test:id": "node src/id/snowflake.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "ioredis": "^5.4.2",
+    "pg": "^8.13.1"
+  }
+}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="header">
+        <div>
+          <p class="eyebrow">Distributed systems lab</p>
+          <h1>URL Shortener</h1>
+        </div>
+        <div id="health" class="health" aria-live="polite">
+          <span class="dot"></span>
+          <span class="health-text">checking…</span>
+        </div>
+      </header>
+
+      <section class="panel">
+        <h2>Shorten a URL</h2>
+        <form id="shorten-form">
+          <label for="long-url">Long URL</label>
+          <input
+            id="long-url"
+            name="url"
+            type="url"
+            required
+            placeholder="https://example.com/very/long/path"
+            autocomplete="off"
+          />
+
+          <label for="expires">Expires in days (optional)</label>
+          <input
+            id="expires"
+            name="expiresInDays"
+            type="number"
+            min="1"
+            step="1"
+            placeholder="e.g. 7"
+          />
+
+          <button type="submit" id="shorten-btn">Shorten</button>
+        </form>
+
+        <div id="shorten-error" class="error" hidden></div>
+
+        <div id="result" class="result" hidden>
+          <div class="result-header">
+            <p class="result-label">Short URL</p>
+            <span id="result-badge" class="badge" hidden></span>
+          </div>
+          <div class="result-row">
+            <a id="short-link" href="#" target="_blank" rel="noopener"></a>
+            <button type="button" id="copy-btn" class="ghost">Copy</button>
+          </div>
+          <dl class="meta">
+            <div>
+              <dt>Code</dt>
+              <dd id="meta-code"></dd>
+            </div>
+            <div>
+              <dt>Created</dt>
+              <dd id="meta-created"></dd>
+            </div>
+            <div>
+              <dt>Expires</dt>
+              <dd id="meta-expires"></dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Look up a short code</h2>
+        <form id="lookup-form" class="inline-form">
+          <input
+            id="lookup-code"
+            name="code"
+            type="text"
+            required
+            pattern="[0-9a-zA-Z]+"
+            placeholder="short code"
+            autocomplete="off"
+          />
+          <button type="submit">Look up</button>
+        </form>
+        <div id="lookup-error" class="error" hidden></div>
+        <pre id="lookup-result" class="code-block" hidden></pre>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
