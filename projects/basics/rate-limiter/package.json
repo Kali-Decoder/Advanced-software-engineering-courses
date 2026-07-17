@@ -1,0 +1,19 @@
+{
+  "name": "rate-limiter",
+  "version": "1.0.0",
+  "description": "Distributed rate limiter — Node.js, Redis, Lua token bucket",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test:limiter": "node src/limiter/tokenBucket.test.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "ioredis": "^5.4.2"
+  }
+}

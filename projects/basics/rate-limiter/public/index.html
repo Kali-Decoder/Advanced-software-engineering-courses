@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Rate Limiter</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="header">
+        <div>
+          <p class="eyebrow">Distributed systems lab</p>
+          <h1>Rate Limiter</h1>
+        </div>
+        <div id="health" class="health" aria-live="polite">
+          <span class="dot"></span>
+          <span class="health-text">checking…</span>
+        </div>
+      </header>
+
+      <section class="panel">
+        <h2>Shared token bucket</h2>
+        <p class="lede">
+          Requests hit Nginx → either API worker → Redis Lua. The limit is
+          global: draining the bucket on worker 1 also blocks worker 2.
+        </p>
+
+        <label for="api-key">API key (client identity)</label>
+        <input id="api-key" type="text" value="demo-user" autocomplete="off" />
+
+        <div class="row">
+          <div>
+            <label for="burst">Burst size</label>
+            <input id="burst" type="number" min="1" max="100" value="15" />
+          </div>
+          <div>
+            <label for="algorithm">Algorithm</label>
+            <select id="algorithm">
+              <option value="token_bucket">Token bucket</option>
+              <option value="sliding_window">Sliding window</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="button" id="fire-btn">Fire burst</button>
+          <button type="button" id="reset-btn" class="ghost">Reset bucket</button>
+          <button type="button" id="status-btn" class="ghost">Peek status</button>
+        </div>
+
+        <div id="summary" class="summary" hidden>
+          <dl class="meta">
+            <div>
+              <dt>Allowed</dt>
+              <dd id="sum-allowed">—</dd>
+            </div>
+            <div>
+              <dt>Denied (429)</dt>
+              <dd id="sum-denied">—</dd>
+            </div>
+            <div>
+              <dt>Workers seen</dt>
+              <dd id="sum-workers">—</dd>
+            </div>
+          </dl>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Request log</h2>
+        <div id="log" class="log" aria-live="polite">
+          <p class="muted">Fire a burst to see allow / deny across workers.</p>
+        </div>
+      </section>
+    </main>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
